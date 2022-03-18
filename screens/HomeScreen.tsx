@@ -8,6 +8,7 @@
  * @format
  */
 
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {
   Button,
@@ -27,7 +28,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-
+import {RootStackParamList} from '../types';
 
 const Section: React.FC<{
   title: string;
@@ -57,7 +58,7 @@ const Section: React.FC<{
   );
 };
 
-const HomeScreen = () => {
+const HomeScreen = ({route, navigation}: Props) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -76,8 +77,8 @@ const HomeScreen = () => {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Section title="Step One">
-            Edit <Text style={styles.highlight}>HomeScreen.tsx</Text> to change this
-            screen and then come back to see your edits.
+            Edit <Text style={styles.highlight}>HomeScreen.tsx</Text> to change
+            this screen and then come back to see your edits.
           </Section>
           <Section title="See Your Changes">
             <ReloadInstructions />
@@ -89,6 +90,12 @@ const HomeScreen = () => {
             Read the docs to discover what to do next:
           </Section>
           <LearnMoreLinks />
+          <Button
+            title="Goto Testing"
+            onPress={() => {
+              navigation.navigate('Testing');
+            }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -113,5 +120,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default HomeScreen;
