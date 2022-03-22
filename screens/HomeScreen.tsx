@@ -20,7 +20,11 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-fontawesome';
+// import FontAwesome, {
+//   SolidIcons,
+//   RegularIcons,
+//   BrandIcons,
+// } from 'react-native-fontawesome';
 // import MapboxGL from '@react-native-mapbox-gl/maps';
 // import style from '../assets/css/home.css' ;
 
@@ -33,44 +37,42 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
 
+import {Icon} from 'react-native-elements';
+
 const HomeScreen = ({route, navigation}: Props) => {
-
   return (
-    <SafeAreaView >
-    <View style={styles.map}>
-
-     <View style={styles.navbar}>
-        <FontAwesome style={styles.ic} icon={SolidIcons.user} />
-        <View> <FontAwesome  /> </View>
-        <Button title='Explore' />
+    <SafeAreaView>
+      <View style={styles.map}>
+        <View style={styles.navbar}>
+          <Icon name="person" />
+          <Button title="Explore" />
+        </View>
       </View>
-     </View>
-
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  map : {
-      height :'100%' ,
-      width : '100%' ,
-      display:'flex',
-      flexDirection : 'column' ,
-      justifyContent : 'flex-end' ,
-      backgroundColor : '#0A95FF' ,
+  map: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    backgroundColor: '#0A95FF',
   },
-  ic : {
-    color : '#EA3924' ,
+  ic: {
+    color: '#EA3924',
   },
   navbar: {
-    backgroundColor : '#FFFFFF' ,
-    verticalAlign : 'bottom' ,
-    display:'flex',
-    flexDirection : 'row' ,
-    justifyContent : 'space-between' ,
-    height:'10%' ,
-    width:'100%',
-  }
+    backgroundColor: '#FFFFFF',
+    verticalAlign: 'bottom',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: '10%',
+    width: '100%',
+  },
 });
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
