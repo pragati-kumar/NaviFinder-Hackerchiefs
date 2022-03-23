@@ -15,13 +15,11 @@ const App = () => {
       {/* <StatusBar />
       <Text>Hello World</Text> */}
       <NavigationContainer>
-        <RootStack.Navigator initialRouteName="Home">
+        <RootStack.Navigator
+          initialRouteName="Home"
+          screenOptions={{headerShown: false}}>
           <RootStack.Screen name="Testing" component={TestingScreen} />
-          <RootStack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{title: 'Welcome'}}
-          />
+          <RootStack.Screen name="Home" component={HomeScreen} />
         </RootStack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
