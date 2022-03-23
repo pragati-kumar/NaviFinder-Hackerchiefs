@@ -9,7 +9,7 @@
  */
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React from 'react';
+import React,{useEffect} from 'react';
 import {
   Button,
   SafeAreaView,
@@ -34,13 +34,20 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
+MapboxGL.setAccessToken('tk.eyJ1IjoicHJhbmphbGphaW41ODQiLCJhIjoiY2wxM2NxOTJiMDRyczNwbHFuenRieWJ3ZiJ9.TI2Iu1g49_kXNr5sUJro9A');
 import {Icon} from 'react-native-elements';
+MapboxGL.setConnected(true);
 
 const HomeScreen = ({route, navigation}: Props) => {
+useEffect(()=>{
+//      MapboxGL.setTelemetryEnabled(false);
+},[]) ;
   return (
     <SafeAreaView>
       <View style={styles.map}>
+      <MapboxGL.MapView style={styles.map2} />
         <View style={styles.navbar}>
 
          <View style={styles.ic}>
@@ -81,6 +88,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: '#F0F1F3',
   },
+  map2: {
+      flex: 1
+    },
   navigate : {
     width: 60 ,
     height: 60 ,
@@ -113,7 +123,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    height: '10%',
+    height: '9%',
     width: '100%',
   },
 });
