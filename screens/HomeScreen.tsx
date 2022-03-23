@@ -19,13 +19,11 @@ import {
   Text,
   useColorScheme,
   View,
+  TouchableNativeFeedback,
+    TouchableHighlight,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
 } from 'react-native';
-// import FontAwesome, {
-//   SolidIcons,
-//   RegularIcons,
-//   BrandIcons,
-// } from 'react-native-fontawesome';
-// import MapboxGL from '@react-native-mapbox-gl/maps';
 // import style from '../assets/css/home.css' ;
 
 import {
@@ -44,8 +42,30 @@ const HomeScreen = ({route, navigation}: Props) => {
     <SafeAreaView>
       <View style={styles.map}>
         <View style={styles.navbar}>
-          <Icon name="person" />
-          <Button title="Explore" />
+
+         <View style={styles.ic}>
+             <Icon color='#8E91A5' name="map" type="font-awesome" />
+             <Text style={styles.icText} > Explore </Text>
+         </View>
+
+        <View style={styles.ic}>
+         <Icon color='#8E91A5' name="person" />
+         <Text style={styles.icText} > Profile </Text>
+         </View>
+
+          <View style={styles.navigate}>
+            <Icon color='white' name="location-arrow" type="font-awesome"  />
+           </View>
+
+          <View style={styles.ic}>
+           <Icon color='#8E91A5' name="person" />
+           <Text style={styles.icText} > Profile </Text>
+            </View>
+
+        <View style={styles.ic}>
+         <Icon color='#8E91A5' name="bars" type="font-awesome" />
+         <Text style={styles.icText} > More </Text>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -59,17 +79,40 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end',
-    backgroundColor: '#0A95FF',
+    backgroundColor: '#F0F1F3',
+  },
+  navigate : {
+    width: 60 ,
+    height: 60 ,
+    backgroundColor:'#EA3924' ,
+    borderRadius : 100,
+    marginTop : -18,
+    elevation : 5,
+    paddingTop: 17 ,
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    shadowOffset: {
+      height: 0,
+      width: 0
+    }
   },
   ic: {
-    color: '#EA3924',
+    color: '#8E91A5',
+    width: 60,
+    paddingTop:10,
+  },
+  icText : {
+    color:'#8E91A5',
+    fontFamily : 'sans-serif' ,
+    alignSelf : 'center' ,
   },
   navbar: {
     backgroundColor: '#FFFFFF',
     verticalAlign: 'bottom',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     height: '10%',
     width: '100%',
   },
