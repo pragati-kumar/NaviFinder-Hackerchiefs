@@ -14,6 +14,8 @@ target 'FirstProject' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNWifi', :path => '../node_modules/react-native-wifi-reborn'
+
   target 'FirstProjectTests' do
     inherit! :complete
     # Pods for testing

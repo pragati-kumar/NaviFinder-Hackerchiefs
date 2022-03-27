@@ -19,6 +19,7 @@ import {
   Text,
   useColorScheme,
   View,
+  PermissionsAndroid,
   TouchableNativeFeedback,
     TouchableHighlight,
     TouchableOpacity,
@@ -34,8 +35,79 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
-
+import WifiManager from "react-native-wifi-reborn";
+import { BleManager } from 'react-native-ble-plx';
 import {Icon} from 'react-native-elements';
+
+const requestWifiPermission = async () => {
+  try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: "Cool Photo App Camera Permission",
+            message:
+              "Cool Photo App needs access to your camera " +
+              "so you can take awesome pictures.",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK"
+          }
+        )
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log("Thank you for your permission! :)");
+//           WifiManager.isEnabled((isEnabled) => {
+//             if (isEnabled) {
+//               console.log("wifi service enabled");
+//             } else {
+//               console.log("wifi service is disabled");
+//             }
+//           });
+
+          WifiManager.getCurrentWifiSSID().then(
+            ssid => {
+              console.log("Your current connected wifi SSID is " + ssid);
+            },
+            () => {
+              console.log("Cannot get current SSID!");
+            }
+          );
+          WifiManager.getBSSID().then(
+              bssid => {
+                console.log("Your current connected wifi BSSID is " + bssid);
+              },
+              () => {
+                console.log("Cannot get current BSSSID!");
+              }
+            );
+
+//        WifiManager.loadWifiList().then(
+//          wifiStringList => {
+//            var wifiArray = JSON.parse(wifiStringList);
+//             console.log("wifiArray:",wifiArray);
+//          },
+//          () => {
+//            console.log("Cannot get wifiList!");
+//          }
+//        );
+
+        WifiManager.getCurrentSignalStrength().then(
+          level => {
+            console.log("Your current connected wifi RSSI is " + level);
+          },
+          () => {
+            console.log("Cannot get current RSSI!");
+          }
+        );
+
+        } else {
+          console.log("You will not able to retrieve wifi available networks list");
+        }
+      } catch (err) {
+        console.warn("err:***",err)
+      }
+
+
+};
 
 const HomeScreen = ({route, navigation}: Props) => {
     const [selected,setSelected] = useState('Indoor') ;
@@ -57,6 +129,8 @@ const HomeScreen = ({route, navigation}: Props) => {
          <Text style={[styles.toggleText,selected=='Outdoor'? styles.selectedBtn : {} ]}> Outdoor </Text>
          </TouchableHighlight>
         </View>
+
+        <Button title="request wifi permissions" onPress={requestWifiPermission} />
 
         <View style={styles.navbar}>
 
