@@ -9,7 +9,7 @@
  */
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React,{useEffect} from 'react';
+import React,{useEffect,useState} from 'react';
 import {
   Button,
   SafeAreaView,
@@ -34,20 +34,30 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
-import MapboxGL from '@react-native-mapbox-gl/maps';
 
-MapboxGL.setAccessToken('tk.eyJ1IjoicHJhbmphbGphaW41ODQiLCJhIjoiY2wxM2NxOTJiMDRyczNwbHFuenRieWJ3ZiJ9.TI2Iu1g49_kXNr5sUJro9A');
 import {Icon} from 'react-native-elements';
-MapboxGL.setConnected(true);
 
 const HomeScreen = ({route, navigation}: Props) => {
-useEffect(()=>{
-//      MapboxGL.setTelemetryEnabled(false);
-},[]) ;
+    const [selected,setSelected] = useState('Indoor') ;
+    const onPressButton = () => {
+        setSelected('Outdoor') ;
+    }
+  const onPressButton2 = () => {
+      setSelected('Indoor') ;
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.map}>
-      <MapboxGL.MapView style={styles.map2} />
+        <View style={styles.toggle}>
+         <TouchableHighlight underlayColor="#FFFFFF" style={[styles.toggleBtn,selected=='Indoor' && styles.selectedBtn , selected=='Indoor' && styles.selectedIn ]} onPress={onPressButton2}>
+         <Text style={[styles.toggleText,selected=='Indoor'? styles.selectedBtn : {} ]}> Indoor </Text>
+         </TouchableHighlight>
+         <TouchableHighlight underlayColor="#FFFFFF" style={[styles.toggleBtn,selected=='Outdoor'&& styles.selectedBtn , selected=='Outdoor' && styles.selectedOut]}onPress={onPressButton}>
+         <Text style={[styles.toggleText,selected=='Outdoor'? styles.selectedBtn : {} ]}> Outdoor </Text>
+         </TouchableHighlight>
+        </View>
+
         <View style={styles.navbar}>
 
          <View style={styles.ic}>
@@ -85,12 +95,9 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     backgroundColor: '#F0F1F3',
   },
-  map2: {
-      flex: 1
-    },
   navigate : {
     width: 60 ,
     height: 60 ,
@@ -107,6 +114,40 @@ const styles = StyleSheet.create({
       width: 0
     }
   },
+  selectedBtn : {
+    backgroundColor : '#EA3924' ,
+    color : '#FFFFFF',
+  },
+  selectedOut:{
+    borderBottomRightRadius:10 ,
+    borderTopRightRadius:10,
+  },
+  selectedIn : {
+    borderBottomLeftRadius:10,
+    borderTopLeftRadius:10,
+  },
+  toggle : {
+    alignSelf:'center' ,
+    marginTop:'10%',
+    height : '7%',
+    width:'50%',
+    backgroundColor : '#FFFFFF' ,
+    display:'flex' ,
+    flexDirection : 'row' ,
+    justifyContent:'space-between',
+    borderRadius:10,
+  },
+  toggleBtn : {
+    color:'black',
+    padding:12,
+    width:'50%'
+  },
+  toggleText : {
+    alignSelf:'center',
+    fontSize:15 ,
+    color:'#8E91A5' ,
+    fontWeight : 'bold',
+  } ,
   ic: {
     color: '#8E91A5',
     width: 60,
