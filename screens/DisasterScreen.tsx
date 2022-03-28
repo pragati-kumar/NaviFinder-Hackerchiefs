@@ -14,13 +14,13 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Alert
+  Alert,
+  Image
 } from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Header} from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
 
-//const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 const Disaster = () => {
 
@@ -42,19 +42,29 @@ const Disaster = () => {
     <SafeAreaProvider>
       {/* <StatusBar />
       <Text>Hello World</Text> */}
-      <View style={styles.toggleBtn}>
-      <Button  color="red" title="Panic Button" onPress={createAlert}/>
+      <View>
+        <View style={styles.toggleBtn}>
+
+        <Button  color="red" title="Panic Button" onPress={createAlert}/>
+        </View>
+
+        <Image source={require('./32600.jpg')} style={{width: "100%", height: "90%"}}/>
+
       </View>
+
+
     </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
   toggleBtn: {
-    padding: 12,
+    padding: 2,
     width: '50%',
-    marginTop:'2%',
-    marginLeft:'25%'
+    marginTop:'5%',
+    marginLeft:'25%',
+    marginBottom:'5%',
+    borderRadius: 20,
   }
 
 });
