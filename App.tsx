@@ -5,11 +5,37 @@ import HomeScreen from './screens/HomeScreen';
 import TestingScreen from './screens/TestingScreen';
 import {RootStackParamList} from './types';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import {StatusBar, Text} from 'react-native';
+import {Alert, StatusBar, Text} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+
+async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
+  }
+}
+
+async function initFirebase() {
+  await requestUserPermission();
+
+  const unsubscribe = messaging().onMessage(async remoteMessage => {
+    Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+  });
+
+  return unsubscribe;
+}
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 const App = () => {
+  React.useEffect(() => {
+    initFirebase();
+  }, []);
+
   return (
     <SafeAreaProvider>
       {/* <StatusBar />
