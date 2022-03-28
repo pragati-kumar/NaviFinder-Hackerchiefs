@@ -197,7 +197,7 @@ const HomeScreen = ({route, navigation}: Props) => {
   return (
     <SafeAreaView>
       <View style={styles.map}>
-        <View style={styles.toggle}>
+      <View style={styles.toggle}>
           <TouchableHighlight
             underlayColor="#FFFFFF"
             style={[
@@ -233,10 +233,10 @@ const HomeScreen = ({route, navigation}: Props) => {
             </Text>
           </TouchableHighlight>
         </View>
-
+        <View style={styles.mp}>
         <MapView
           provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-          style={styles.mpview}
+          style={[styles.mpview,StyleSheet.absoluteFillObject]}
           region={{
             latitude,
             longitude,
@@ -244,12 +244,12 @@ const HomeScreen = ({route, navigation}: Props) => {
             longitudeDelta: 0.0121,
           }}
         >
+          
         </MapView>
-        {/* <Button title="Get Location"
-          onPress={permissionHandle}
-        /> */}
+        </View>
+        
 
-        <Button
+        {/* <Button
           title="request wifi permissions"
           onPress={requestWifiPermission}
         />
@@ -258,7 +258,7 @@ const HomeScreen = ({route, navigation}: Props) => {
           onPress={() => {
             navigation.navigate('Testing');
           }}
-        />
+        /> */}
 
         <View style={styles.navbar}>
           <View style={styles.ic}>
@@ -291,18 +291,21 @@ const HomeScreen = ({route, navigation}: Props) => {
 };
 
 const styles = StyleSheet.create({
-  mpview:{
-    height: 400,
-   width: 400,
-   justifyContent: 'flex-end',
-   alignItems: 'center',
+  // mpview:{
+  //   height: '85%',
+  //  width: "100%",
+  // },
+  mp : {
+    elevation:-5,
+    height: '90%',
+   width: "100%",
   },
   map: {
     height: '100%',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     backgroundColor: '#F0F1F3',
   },
   navigate: {
@@ -334,8 +337,9 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
   },
   toggle: {
+    position:'absolute',
     alignSelf: 'center',
-    marginTop: '10%',
+    top:'6.5%',
     height: '7%',
     width: '50%',
     backgroundColor: '#FFFFFF',
@@ -343,6 +347,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderRadius: 10,
+    elevation:5,
+    zIndex:2,
   },
   toggleBtn: {
     color: 'black',
