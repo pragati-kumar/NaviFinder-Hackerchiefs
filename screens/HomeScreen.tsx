@@ -42,6 +42,7 @@ import {BleManager} from 'react-native-ble-plx';
 import {Icon} from 'react-native-elements';
 import axios from 'axios';
 import DeviceInfo from 'react-native-device-info';
+import { Marker } from "react-native-maps";
 
 const requestWifiPermission = async () => {
   try {
@@ -236,7 +237,7 @@ const HomeScreen = ({route, navigation}: Props) => {
         <View style={styles.mp}>
         <MapView
           provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-          style={[styles.mpview,StyleSheet.absoluteFillObject]}
+          style={styles.mpview}
           region={{
             latitude,
             longitude,
@@ -244,10 +245,15 @@ const HomeScreen = ({route, navigation}: Props) => {
             longitudeDelta: 0.0121,
           }}
         >
-          
+        <Marker coordinate={{
+            latitude,
+            longitude,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }} />
         </MapView>
         </View>
-        
+
 
         {/* <Button
           title="request wifi permissions"
@@ -293,10 +299,10 @@ const HomeScreen = ({route, navigation}: Props) => {
 };
 
 const styles = StyleSheet.create({
-  // mpview:{
-  //   height: '85%',
-  //  width: "100%",
-  // },
+  mpview:{
+    height: '100%',
+   width: "100%",
+  },
   mp : {
     elevation:-5,
     height: '90%',
