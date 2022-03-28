@@ -24,9 +24,12 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
+import GetLocation from 'react-native-get-location' ;
+import Location from 'react-native-get-location' ;
 // import style from '../assets/css/home.css' ;
-
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import {
   Colors,
   DebugInstructions,
@@ -55,7 +58,6 @@ const requestWifiPermission = async () => {
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       console.log('Thank you for your permission! :)');
-
       WifiManager.getCurrentWifiSSID().then(
         ssid => {
           console.log('Your current connected wifi SSID is ' + ssid);
@@ -91,6 +93,7 @@ const requestWifiPermission = async () => {
 
 const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Indoor');
+  const [location,setLocation] = useState<Location|null>(null) ;
   const onPressButton = () => {
     setSelected('Outdoor');
   };
@@ -98,6 +101,57 @@ const HomeScreen = ({route, navigation}: Props) => {
     setSelected('Indoor');
   };
 
+  const requestLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(loc => {
+        console.log( "location----" + loc) ;
+      })
+      .catch(ex => {
+        const {code, message} = ex;
+        console.warn(code, message);
+        console.log(ex) ;
+        if (code === 'CANCELLED') {
+          Alert.alert('Location cancelled by user or by another request');
+        }
+        if (code === 'UNAVAILABLE') {
+          Alert.alert('Location service is disabled or unavailable');
+        }
+        if (code === 'TIMEOUT') {
+          Alert.alert('Location request timed out');
+        }
+        if (code === 'UNAUTHORIZED') {
+          Alert.alert('Authorization denied');
+        }
+      });
+  };
+
+  const requestCurrentLocation = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Cool Photo App Camera Permission',
+          message:
+            'Cool Photo App needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Thank you for your location! :)');
+        requestLocation() ;
+      } else {
+        console.log('You will not able to retrieve location available networks list');
+      }
+    } catch (err) {
+      console.warn('err:***', err);
+    }
+  };
   //   const bluetoothInstance = new BleManager();
 
   //     const scanAndConnect = () => {
@@ -118,14 +172,14 @@ const HomeScreen = ({route, navigation}: Props) => {
   //       });
   //     };
 
-  //     useEffect(() => {
-  //       bluetoothInstance.onStateChange((state) => {
-  //         console.log('state', state);
-  //         if (state === 'PoweredOn') {
-  //           scanAndConnect();
-  //         }
-  //       }, true);
-  //     }, []);
+      useEffect(() => {
+        // bluetoothInstance.onStateChange((state) => {
+        //   console.log('state', state);
+        //   if (state === 'PoweredOn') {
+        //     scanAndConnect();
+        //   }
+        // }, true);
+      }, []);
 
   return (
     <SafeAreaView>
@@ -166,6 +220,23 @@ const HomeScreen = ({route, navigation}: Props) => {
             </Text>
           </TouchableHighlight>
         </View>
+
+        <MapView
+          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+          style={styles.mpview}
+          region={{
+            latitude: 28.6118,
+            longitude: 77.036,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }}
+        >
+        </MapView>
+
+        <Button
+            title="Location"
+            onPress={requestCurrentLocation}
+          />
 
         <Button
           title="request wifi permissions"
@@ -209,6 +280,12 @@ const HomeScreen = ({route, navigation}: Props) => {
 };
 
 const styles = StyleSheet.create({
+  mpview:{
+    height: 400,
+   width: 400,
+   justifyContent: 'flex-end',
+   alignItems: 'center',
+  },
   map: {
     height: '100%',
     width: '100%',
