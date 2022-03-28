@@ -21,7 +21,7 @@ setUpdateIntervalForType(SensorTypes.gyroscope, 1000); // defaults to 100ms
 const TestingScreen = ({route, navigation}: Props) => {
   const [speed, setSpeed] = useState(0);
   const [gyro, setGyro] = useState(0) ;
-  const [angle,setAngle] = useState(0) ;
+  const [angle,setAngle] = useState({x:0,y:0,z:0}) ;
   const [subscription, setSubscription] = useState<Subscription>();
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
   const [gyroSubscription, setGyroSubscription] = useState<Subscription>();
@@ -70,20 +70,18 @@ const TestingScreen = ({route, navigation}: Props) => {
 
   const startNewMagnetSubscription = () => {
       const newMagnetSubscription = magnetometer
-        .pipe(
-          map(({x, y, z}) => x + y + z),
-//           filter(({x,y,z})=>{
-//               if (Math.atan2(y, x) >= 0) {
-//                 setAngle(Math.atan2(y, x) * (180 / Math.PI)) ;
-//               } else {
-//                 setAngle((Math.atan2(y, x) + 2 * Math.PI) * (180 / Math.PI)) ;
-//               }
-//           }) ,
-        )
+        // .pipe(
+        //   map(({x, y, z}) => {
+        //     console.log(x) ;
+        //     console.log(y) ;
+        //     console.log(z) ;
+        //     return(x + y + z) ;
+        //   })
+        // )
         .subscribe(
-          val => {
-            console.log(`magnetometer value ${val}`);
-//             setGyro(val);
+          ({x,y,z}) => {
+            console.log(`magnetometer value ${x}, ${y}, ${z}`);
+            setAngle({x,y,z}) ;
           },
           error => {
             console.log('The sensor is not available');
@@ -127,7 +125,6 @@ const TestingScreen = ({route, navigation}: Props) => {
             }
           }}
         />
-        <Text>Current Magnetometer: {angle}</Text>
         <Button
           title={(magnetSubscription ? 'Stop' : 'Start') + ' Monitoring Magnetometer'}
           onPress={() => {
