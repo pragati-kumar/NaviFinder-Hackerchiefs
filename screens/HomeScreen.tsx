@@ -44,59 +44,12 @@ import axios from 'axios';
 import DeviceInfo from 'react-native-device-info';
 import {Marker} from 'react-native-maps';
 
-const requestWifiPermission = async () => {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: 'Cool Photo App Camera Permission',
-        message:
-          'Cool Photo App needs access to your camera ' +
-          'so you can take awesome pictures.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log('Thank you for your permission! :)');
-      WifiManager.getCurrentWifiSSID().then(
-        ssid => {
-          console.log('Your current connected wifi SSID is ' + ssid);
-        },
-        () => {
-          console.log('Cannot get current SSID!');
-        },
-      );
-      WifiManager.getBSSID().then(
-        bssid => {
-          console.log('Your current connected wifi BSSID is ' + bssid);
-        },
-        () => {
-          console.log('Cannot get current BSSSID!');
-        },
-      );
-
-      WifiManager.getCurrentSignalStrength().then(
-        level => {
-          console.log('Your current connected wifi RSSI is ' + level);
-        },
-        () => {
-          console.log('Cannot get current RSSI!');
-        },
-      );
-    } else {
-      console.log('You will not able to retrieve wifi available networks list');
-    }
-  } catch (err) {
-    console.warn('err:***', err);
-  }
-};
 
 const HomeScreen = ({route, navigation}: Props) => {
-  const [selected, setSelected] = useState('Indoor');
+  const [selected, setSelected] = useState('Outdoor');
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [rssi,setRssi] = useState(0) ;
   const token =
     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI2MjQxZWQzZDQ3ZDlhN2NkMTI4MDNiNWEiLCJwaG9uZSI6Ijk2NTA4NjY5OTMifQ.rECSBX_ORiy0p0Mn0fX5NYLHUZ2mJMpXqj1cN0S4n5U';
   RNLocation.configure({
@@ -105,8 +58,94 @@ const HomeScreen = ({route, navigation}: Props) => {
   const onPressButton = () => {
     setSelected('Outdoor');
   };
-  const onPressButton2 = () => {
+  const requestWifiPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Cool Photo App Camera Permission',
+          message:
+            'Cool Photo App needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        // console.log('Thank you for your permission! :)');
+        WifiManager.getCurrentWifiSSID().then(
+          ssid => {
+            console.log('Your current connected wifi SSID is ' + ssid);
+          },
+          () => {
+            console.log('Cannot get current SSID!');
+          },
+        );
+        WifiManager.getBSSID().then(
+          bssid => {
+            console.log('Your current connected wifi BSSID is ' + bssid);
+          },
+          () => {
+            console.log('Cannot get current BSSSID!');
+          },
+        );
+  
+        WifiManager.getCurrentSignalStrength().then(
+          level => {
+            setRssi(level) ;
+            console.log(level) ;
+            console.log('Your current connected wifi RSSI is ' + rssi);
+          },
+          () => {
+            console.log('Cannot get current RSSI!');
+          },
+        );
+      } else {
+        console.log('You will not able to retrieve wifi available networks list');
+      }
+    } catch (err) {
+      console.warn('err:***', err);
+    }
+  };
+
+  const reqIndoorCoordinates = async (trial:boolean) => {
+    // requestWifiPermission() ;
+    WifiManager.getCurrentSignalStrength().then(
+      level => {
+        setRssi(level) ;
+        // console.log(level) ;
+        // console.log('Your current connected wifi RSSI is ' + rssi);
+        // console.log("RSSI_____",rssi) ;
+        axios.post('http://192.168.29.74:4000/location/indoor',
+        {
+          rssi: level,
+          trial,
+        },
+        {
+          headers: {
+            'x-auth-token': token,
+          },
+        }).then( res => {
+          console.log("-------") ;
+          console.log(res.data) ;
+        }
+        ).catch(err => {
+          console.log(err.data ?? err) ;
+        }) ;
+      },
+      () => {
+        console.log('Cannot get current RSSI!');
+      },
+    );
+    
+  }
+  
+  const onPressButton2 = async () => {
     setSelected('Indoor');
+    await requestWifiPermission() ;
+    await reqIndoorCoordinates(true) ;
+    setInterval( () => {reqIndoorCoordinates(false)}, 900);
   };
 
   const permissionHandle = async () => {
@@ -170,12 +209,12 @@ const HomeScreen = ({route, navigation}: Props) => {
       //   });
       await axios
         .post(
-          'http://192.168.0.101:4000/location/outdoor',
+          'http://192.168.29.74:4000/location/outdoor',
           {
             latitude: location?.latitude ?? 0,
             longitude: location?.longitude ?? 0,
             modelName: DeviceInfo.getModel(),
-            trial: false,
+            trial: true,
           },
           {
             headers: {
