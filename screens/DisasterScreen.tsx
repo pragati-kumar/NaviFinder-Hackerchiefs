@@ -14,7 +14,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Alert,
+  Alert
 } from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Header} from 'react-native/Libraries/NewAppScreen';
@@ -24,12 +24,26 @@ import {RootStackParamList} from '../types';
 
 const Disaster = () => {
 
+  const createAlert = () =>
+    Alert.alert(
+      "",
+      "Are you sure you want to broadcast your location to nearby Rescue Authorities?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+
   return (
     <SafeAreaProvider>
       {/* <StatusBar />
       <Text>Hello World</Text> */}
       <View style={styles.toggleBtn}>
-      <Button  color="red" title="Panic Button" />
+      <Button  color="red" title="Panic Button" onPress={createAlert}/>
       </View>
     </SafeAreaProvider>
   );

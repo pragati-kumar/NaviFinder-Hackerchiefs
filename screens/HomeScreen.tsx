@@ -274,7 +274,7 @@ const HomeScreen = ({route, navigation}: Props) => {
 
           <TouchableWithoutFeedback onPress={() => navigation.navigate('Disaster')}>
           <View style={styles.ic}>
-            <Icon color="#8E91A5" name="person" />
+            <Icon color="#8E91A5" name="warning" />
             <Text style={styles.icText}> Panic </Text>
           </View>
           </TouchableWithoutFeedback>
