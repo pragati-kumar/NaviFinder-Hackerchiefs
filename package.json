@@ -18,6 +18,7 @@
     "react-native": "0.67.3",
     "react-native-ble-plx": "^2.0.3",
     "react-native-elements": "^4.0.0-beta.0",
+    "react-native-firebase": "^5.6.0",
     "react-native-maps": "0.30.1",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^3.13.1",
