@@ -16,6 +16,8 @@ target 'SIH2022' do
 
   pod 'RNWifi', :path => '../node_modules/react-native-wifi-reborn'
 
+  pod 'react-native-location', :path => '../node_modules/react-native-location'
+
   target 'SIH2022Tests' do
     inherit! :complete
     # Pods for testing
