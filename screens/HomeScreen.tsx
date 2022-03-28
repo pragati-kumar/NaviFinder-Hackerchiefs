@@ -28,7 +28,7 @@ import {
 } from 'react-native';
 import RNLocation from 'react-native-location';
 // import style from '../assets/css/home.css' ;
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {
   Colors,
   DebugInstructions,
@@ -42,7 +42,7 @@ import {BleManager} from 'react-native-ble-plx';
 import {Icon} from 'react-native-elements';
 import axios from 'axios';
 import DeviceInfo from 'react-native-device-info';
-import { Marker } from "react-native-maps";
+import {Marker} from 'react-native-maps';
 
 const requestWifiPermission = async () => {
   try {
@@ -95,12 +95,13 @@ const requestWifiPermission = async () => {
 
 const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Indoor');
-  const [latitude,setLatitude] = useState(0) ;
-  const [longitude,setLongitude] = useState(0) ;
-  const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI2MjQxZWQzZDQ3ZDlhN2NkMTI4MDNiNWEiLCJwaG9uZSI6Ijk2NTA4NjY5OTMifQ.rECSBX_ORiy0p0Mn0fX5NYLHUZ2mJMpXqj1cN0S4n5U' ;
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+  const token =
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI2MjQxZWQzZDQ3ZDlhN2NkMTI4MDNiNWEiLCJwaG9uZSI6Ijk2NTA4NjY5OTMifQ.rECSBX_ORiy0p0Mn0fX5NYLHUZ2mJMpXqj1cN0S4n5U';
   RNLocation.configure({
-    distanceFilter: 0
-   })
+    distanceFilter: 0,
+  });
   const onPressButton = () => {
     setSelected('Outdoor');
   };
@@ -109,72 +110,98 @@ const HomeScreen = ({route, navigation}: Props) => {
   };
 
   const permissionHandle = async () => {
-
     // console.log('here') ;
 
     let permission = await RNLocation.requestPermission({
-      ios: "whenInUse",
+      ios: 'whenInUse',
       android: {
-        detail: "coarse",
+        detail: 'coarse',
         rationale: {
-          title: "We need to access your location",
-          message: "We use your location to show where you are on the map",
-          buttonPositive: "OK",
-          buttonNegative: "Cancel"
-        }
-      }
-    }) ;
-    if(!permission) {
-        permission = await RNLocation.requestPermission({
-          ios: "whenInUse",
-          android: {
-            detail: "coarse",
-            rationale: {
-              title: "We need to access your location",
-              message: "We use your location to show where you are on the map",
-              buttonPositive: "OK",
-              buttonNegative: "Cancel"
-            }
-          }
-        }) ;
-        const location = await RNLocation.getLatestLocation({timeout: 100}) ;
-        setLatitude(location?.latitude ?? 0) ;
-        setLongitude(location?.longitude ?? 0) ;
-        await axios.post('http://192.168.29.74:4000/location/outdoor',
-        {
-          latitude,
-          longitude,
-          modelName:DeviceInfo.getModel()
+          title: 'We need to access your location',
+          message: 'We use your location to show where you are on the map',
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancel',
         },
-        {
-          headers:{
-            'x-auth-token' : token 
-          }
-        }).then(res => {
-          console.log(res.data) ;
-        }) ;
-        // console.log(location, location?.longitude, location?.latitude,location?.timestamp)
+      },
+    });
+    if (!permission) {
+      permission = await RNLocation.requestPermission({
+        ios: 'whenInUse',
+        android: {
+          detail: 'coarse',
+          rationale: {
+            title: 'We need to access your location',
+            message: 'We use your location to show where you are on the map',
+            buttonPositive: 'OK',
+            buttonNegative: 'Cancel',
+          },
+        },
+      });
+      const location = await RNLocation.getLatestLocation({timeout: 100});
+      setLatitude(location?.latitude ?? 0);
+      setLongitude(location?.longitude ?? 0);
+      // console.log(location, location?.longitude, location?.latitude,location?.timestamp)
     } else {
-        const location = await RNLocation.getLatestLocation({timeout: 100}) ;
-        // console.log(location, location?.longitude, location?.latitude,location?.timestamp) ;
-        setLatitude(location?.latitude ?? 0) ;
-        setLongitude(location?.longitude ?? 0) ;
-        await axios.post('http://192.168.29.74:4000/location/outdoor',
-        {
-          latitude,
-          longitude,
-          modelName:DeviceInfo.getModel()
-        },
-        {
-          headers:{
-            'x-auth-token' : token 
-          }
-        }).then(res => {
-          console.log(res.data) ;
-        }) ;
-    }
+      const location = await RNLocation.getLatestLocation({timeout: 100});
+      console.log(
+        location,
+        location?.longitude,
+        location?.latitude,
+        location?.timestamp,
+      );
+      setLatitude(location?.latitude ?? 0);
+      setLongitude(location?.longitude ?? 0);
+      // await axios
+      //   .post(
+      //     'http://192.168.29.74:4000/location/outdoor',
+      //     {
+      //       latitude,
+      //       longitude,
+      //       modelName: DeviceInfo.getModel(),
+      //     },
+      //     {
+      //       headers: {
+      //         'x-auth-token': token,
+      //       },
+      //     },
+      //   )
+      //   .then(res => {
+      //     console.log(res.data);
+      //   });
+      await axios
+        .post(
+          'http://192.168.0.101:4000/location/outdoor',
+          {
+            latitude: location?.latitude ?? 0,
+            longitude: location?.longitude ?? 0,
+            modelName: DeviceInfo.getModel(),
+            trial: false,
+          },
+          {
+            headers: {
+              'x-auth-token': token,
+            },
+          },
+        )
+        .then(function (response) {
+          // handle success
+          console.log(response.data);
 
-  }
+          const {latitude, longitude} = response.data;
+
+          setLatitude(latitude);
+          setLongitude(longitude);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error.message);
+        })
+        .finally(function () {
+          // always executed
+          console.log('Finally called');
+        });
+    }
+  };
   //   const bluetoothInstance = new BleManager();
 
   //     const scanAndConnect = () => {
@@ -195,21 +222,21 @@ const HomeScreen = ({route, navigation}: Props) => {
   //       });
   //     };
 
-      useEffect(() => {
-        permissionHandle() ;
-        // bluetoothInstance.onStateChange((state) => {
-        //   console.log('state', state);
-        //   if (state === 'PoweredOn') {
-        //     scanAndConnect();
-        //   }
-        // }, true);
-        console.log(DeviceInfo.getModel());
-      }, []);
+  useEffect(() => {
+    permissionHandle();
+    // bluetoothInstance.onStateChange((state) => {
+    //   console.log('state', state);
+    //   if (state === 'PoweredOn') {
+    //     scanAndConnect();
+    //   }
+    // }, true);
+    console.log(DeviceInfo.getModel());
+  }, []);
 
   return (
     <SafeAreaView>
       <View style={styles.map}>
-      <View style={styles.toggle}>
+        <View style={styles.toggle}>
           <TouchableHighlight
             underlayColor="#FFFFFF"
             style={[
@@ -246,25 +273,25 @@ const HomeScreen = ({route, navigation}: Props) => {
           </TouchableHighlight>
         </View>
         <View style={styles.mp}>
-        <MapView
-          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-          style={styles.mpview}
-          region={{
-            latitude,
-            longitude,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          }}
-        >
-        <Marker coordinate={{
-            latitude,
-            longitude,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          }} />
-        </MapView>
+          <MapView
+            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+            style={styles.mpview}
+            region={{
+              latitude,
+              longitude,
+              latitudeDelta: 0.015,
+              longitudeDelta: 0.0121,
+            }}>
+            <Marker
+              coordinate={{
+                latitude,
+                longitude,
+                latitudeDelta: 0.015,
+                longitudeDelta: 0.0121,
+              }}
+            />
+          </MapView>
         </View>
-
 
         {/* <Button
           title="request wifi permissions"
@@ -283,11 +310,12 @@ const HomeScreen = ({route, navigation}: Props) => {
             <Text style={styles.icText}> Explore </Text>
           </View>
 
-          <TouchableWithoutFeedback onPress={() => navigation.navigate('Disaster')}>
-          <View style={styles.ic}>
-            <Icon color="#8E91A5" name="warning" />
-            <Text style={styles.icText}> Panic </Text>
-          </View>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate('Disaster')}>
+            <View style={styles.ic}>
+              <Icon color="#8E91A5" name="warning" />
+              <Text style={styles.icText}> Panic </Text>
+            </View>
           </TouchableWithoutFeedback>
 
           <View style={styles.navigate}>
@@ -310,14 +338,14 @@ const HomeScreen = ({route, navigation}: Props) => {
 };
 
 const styles = StyleSheet.create({
-  mpview:{
+  mpview: {
     height: '100%',
-   width: "100%",
+    width: '100%',
   },
-  mp : {
-    elevation:-5,
+  mp: {
+    elevation: -5,
     height: '90%',
-   width: "100%",
+    width: '100%',
   },
   map: {
     height: '100%',
@@ -356,9 +384,9 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
   },
   toggle: {
-    position:'absolute',
+    position: 'absolute',
     alignSelf: 'center',
-    top:'6.5%',
+    top: '6.5%',
     height: '7%',
     width: '50%',
     backgroundColor: '#FFFFFF',
@@ -366,8 +394,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderRadius: 10,
-    elevation:5,
-    zIndex:2,
+    elevation: 5,
+    zIndex: 2,
   },
   toggleBtn: {
     color: 'black',
