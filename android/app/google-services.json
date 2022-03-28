@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "997951261711",
+    "project_id": "sih-2022-b4209",
+    "storage_bucket": "sih-2022-b4209.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997951261711:android:85200cb1a504ad66f7a77a",
+        "android_client_info": {
+          "package_name": "com.hackerchiefs.sih2022"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997951261711-i8mf3ad9e7sfqi308ua4s0rj0ut1h6g8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqzK5gc7Rh4h48suXTDhp3M4kf4efnPSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997951261711-i8mf3ad9e7sfqi308ua4s0rj0ut1h6g8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
