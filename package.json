@@ -11,6 +11,7 @@
     "buildDebug": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && cd android && ./gradlew assembleDebug"
   },
   "dependencies": {
+    "@notifee/react-native": "^5.0.3",
     "@react-native-firebase/app": "^14.7.0",
     "@react-native-firebase/messaging": "^14.7.0",
     "@react-navigation/native": "^6.0.8",

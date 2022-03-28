@@ -7,6 +7,8 @@ import {RootStackParamList} from './types';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Alert, StatusBar, Text} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
+//import {Notifications} from 'react-native-notifications';
+import notifee from '@notifee/react-native';
 
 async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
@@ -19,7 +21,6 @@ async function requestUserPermission() {
   }
 }
 
-
 async function initFirebase() {
   await requestUserPermission();
 
@@ -29,7 +30,21 @@ async function initFirebase() {
 
 
   const unsubscribe = messaging().onMessage(async remoteMessage => {
-    Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    //Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: '',
+      body: JSON.stringify(remoteMessage),
+      android: {
+        channelId,
+      },
+    });
+
   });
 
   return unsubscribe;
