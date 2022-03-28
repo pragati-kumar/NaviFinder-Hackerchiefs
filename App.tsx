@@ -28,7 +28,6 @@ async function initFirebase() {
     console.log('Message handled in the background!', remoteMessage);
   });
 
-
   const unsubscribe = messaging().onMessage(async remoteMessage => {
     //Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     const channelId = await notifee.createChannel({
@@ -38,13 +37,12 @@ async function initFirebase() {
 
     // Display a notification
     await notifee.displayNotification({
-      title: '',
-      body: JSON.stringify(remoteMessage),
+      title: remoteMessage.notification?.title,
+      body: remoteMessage.notification?.body,
       android: {
         channelId,
       },
     });
-
   });
 
   return unsubscribe;
