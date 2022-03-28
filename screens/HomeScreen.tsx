@@ -109,7 +109,7 @@ const HomeScreen = ({route, navigation}: Props) => {
   const permissionHandle = async () => {
 
     // console.log('here') ;
-    
+
     let permission = await RNLocation.requestPermission({
       ios: "whenInUse",
       android: {
@@ -161,7 +161,7 @@ const HomeScreen = ({route, navigation}: Props) => {
           console.log(res.data) ;
         }) ;
     }
- 
+
   }
   //   const bluetoothInstance = new BleManager();
 
@@ -266,10 +266,12 @@ const HomeScreen = ({route, navigation}: Props) => {
             <Text style={styles.icText}> Explore </Text>
           </View>
 
+          <TouchableWithoutFeedback onPress={() => navigation.navigate('Disaster')}>
           <View style={styles.ic}>
             <Icon color="#8E91A5" name="person" />
-            <Text style={styles.icText}> Profile </Text>
+            <Text style={styles.icText}> Panic </Text>
           </View>
+          </TouchableWithoutFeedback>
 
           <View style={styles.navigate}>
             <Icon color="white" name="location-arrow" type="font-awesome" />
