@@ -97,6 +97,7 @@ const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Indoor');
   const [latitude,setLatitude] = useState(0) ;
   const [longitude,setLongitude] = useState(0) ;
+  const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI2MjQxZWQzZDQ3ZDlhN2NkMTI4MDNiNWEiLCJwaG9uZSI6Ijk2NTA4NjY5OTMifQ.rECSBX_ORiy0p0Mn0fX5NYLHUZ2mJMpXqj1cN0S4n5U' ;
   RNLocation.configure({
     distanceFilter: 0
    })
@@ -139,11 +140,16 @@ const HomeScreen = ({route, navigation}: Props) => {
         const location = await RNLocation.getLatestLocation({timeout: 100}) ;
         setLatitude(location?.latitude ?? 0) ;
         setLongitude(location?.longitude ?? 0) ;
-        await axios.post('http://192.168.156.244:4000/location/outdoor',
+        await axios.post('http://192.168.29.74:4000/location/outdoor',
         {
           latitude,
           longitude,
           modelName:DeviceInfo.getModel()
+        },
+        {
+          headers:{
+            'x-auth-token' : token 
+          }
         }).then(res => {
           console.log(res.data) ;
         }) ;
@@ -153,11 +159,16 @@ const HomeScreen = ({route, navigation}: Props) => {
         // console.log(location, location?.longitude, location?.latitude,location?.timestamp) ;
         setLatitude(location?.latitude ?? 0) ;
         setLongitude(location?.longitude ?? 0) ;
-        await axios.post('http://192.168.156.244:4000/location/outdoor',
+        await axios.post('http://192.168.29.74:4000/location/outdoor',
         {
           latitude,
           longitude,
           modelName:DeviceInfo.getModel()
+        },
+        {
+          headers:{
+            'x-auth-token' : token 
+          }
         }).then(res => {
           console.log(res.data) ;
         }) ;
