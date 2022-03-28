@@ -41,6 +41,7 @@ import WifiManager from 'react-native-wifi-reborn';
 import {BleManager} from 'react-native-ble-plx';
 import {Icon} from 'react-native-elements';
 import axios from 'axios';
+import DeviceInfo from 'react-native-device-info';
 
 const requestWifiPermission = async () => {
   try {
@@ -140,7 +141,8 @@ const HomeScreen = ({route, navigation}: Props) => {
         await axios.post('http://192.168.156.244:4000/location/outdoor',
         {
           latitude,
-          longitude
+          longitude,
+          modelName:DeviceInfo.getModel()
         }).then(res => {
           console.log(res.data) ;
         }) ;
@@ -153,7 +155,8 @@ const HomeScreen = ({route, navigation}: Props) => {
         await axios.post('http://192.168.156.244:4000/location/outdoor',
         {
           latitude,
-          longitude
+          longitude,
+          modelName:DeviceInfo.getModel()
         }).then(res => {
           console.log(res.data) ;
         }) ;
@@ -188,6 +191,7 @@ const HomeScreen = ({route, navigation}: Props) => {
         //     scanAndConnect();
         //   }
         // }, true);
+        console.log(DeviceInfo.getModel());
       }, []);
 
   return (
