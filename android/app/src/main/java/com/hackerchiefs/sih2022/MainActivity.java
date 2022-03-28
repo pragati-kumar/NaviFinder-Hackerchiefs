@@ -1,4 +1,4 @@
-package com.firstproject;
+package com.hackerchiefs.sih2022;
 
 import com.facebook.react.ReactActivity;
 
