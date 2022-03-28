@@ -55,13 +55,6 @@ const requestWifiPermission = async () => {
         )
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           console.log("Thank you for your permission! :)");
-//           WifiManager.isEnabled((isEnabled) => {
-//             if (isEnabled) {
-//               console.log("wifi service enabled");
-//             } else {
-//               console.log("wifi service is disabled");
-//             }
-//           });
 
           WifiManager.getCurrentWifiSSID().then(
             ssid => {
@@ -79,16 +72,6 @@ const requestWifiPermission = async () => {
                 console.log("Cannot get current BSSSID!");
               }
             );
-
-//        WifiManager.loadWifiList().then(
-//          wifiStringList => {
-//            var wifiArray = JSON.parse(wifiStringList);
-//             console.log("wifiArray:",wifiArray);
-//          },
-//          () => {
-//            console.log("Cannot get wifiList!");
-//          }
-//        );
 
         WifiManager.getCurrentSignalStrength().then(
           level => {
@@ -118,6 +101,35 @@ const HomeScreen = ({route, navigation}: Props) => {
       setSelected('Indoor') ;
   }
 
+//   const bluetoothInstance = new BleManager();
+
+//     const scanAndConnect = () => {
+//       bluetoothInstance.startDeviceScan(null, { allowDuplicates: true }, (error, device) => {
+//         console.log('device', device);
+//         console.log('error', error);
+//         if (error) {
+//           // Handle error (scanning will be stopped automatically)
+//           return;
+//         }
+//
+//         console.log("**"+ device?.name) ;
+//         if (device?.name === 'MyProjectName') {
+//           bluetoothInstance.stopDeviceScan();
+//         } else {
+//           // bluetoothInstance.stopDeviceScan();
+//         }
+//       });
+//     };
+
+//     useEffect(() => {
+//       bluetoothInstance.onStateChange((state) => {
+//         console.log('state', state);
+//         if (state === 'PoweredOn') {
+//           scanAndConnect();
+//         }
+//       }, true);
+//     }, []);
+
   return (
     <SafeAreaView>
       <View style={styles.map}>
@@ -131,6 +143,7 @@ const HomeScreen = ({route, navigation}: Props) => {
         </View>
 
         <Button title="request wifi permissions" onPress={requestWifiPermission} />
+        <Button title="Testing" onPress={navigation.navigate("Testing")} />
 
         <View style={styles.navbar}>
 

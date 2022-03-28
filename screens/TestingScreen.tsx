@@ -8,20 +8,28 @@ import {RootStackParamList} from '../types';
 import {
   accelerometer,
   gyroscope,
+  magnetometer,
   setUpdateIntervalForType,
   SensorTypes,
 } from 'react-native-sensors';
 import {map, filter} from 'rxjs/operators';
 import {Subscription} from 'rxjs/internal/Subscription';
 
-setUpdateIntervalForType(SensorTypes.accelerometer, 400); // defaults to 100ms
+setUpdateIntervalForType(SensorTypes.accelerometer, 1000); // defaults to 100ms
+setUpdateIntervalForType(SensorTypes.gyroscope, 1000); // defaults to 100ms
 
 const TestingScreen = ({route, navigation}: Props) => {
   const [speed, setSpeed] = useState(0);
+  const [gyro, setGyro] = useState(0) ;
+  const [angle,setAngle] = useState(0) ;
   const [subscription, setSubscription] = useState<Subscription>();
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
+  const [gyroSubscription, setGyroSubscription] = useState<Subscription>();
+  const [gyroStatus, setGyroStatus] = useState(false) ;
+  const [magnetSubscription, setMagnetSubscription] = useState<Subscription>();
+  const [magnetStatus, setMagnetStatus] = useState(false) ;
 
-  const startNewSubsciption = () => {
+  const startNewSubscription = () => {
     const newSubscription = accelerometer
       .pipe(
         map(({x, y, z}) => x + y + z),
@@ -41,14 +49,58 @@ const TestingScreen = ({route, navigation}: Props) => {
     setSubscriptionStatus(true);
   };
 
+ const startNewGyroSubscription = () => {
+    const newGyroSubscription = gyroscope
+      .pipe(
+        map(({x, y, z}) => x + y + z)
+      )
+      .subscribe(
+        val => {
+          console.log(`Gyroscope value ${val}`);
+          setGyro(val);
+        },
+        error => {
+          console.log('The sensor is not available');
+        },
+      );
+
+    setGyroSubscription(newGyroSubscription);
+    setGyroStatus(true);
+  };
+
+  const startNewMagnetSubscription = () => {
+      const newMagnetSubscription = magnetometer
+        .pipe(
+          map(({x, y, z}) => x + y + z),
+//           filter(({x,y,z})=>{
+//               if (Math.atan2(y, x) >= 0) {
+//                 setAngle(Math.atan2(y, x) * (180 / Math.PI)) ;
+//               } else {
+//                 setAngle((Math.atan2(y, x) + 2 * Math.PI) * (180 / Math.PI)) ;
+//               }
+//           }) ,
+        )
+        .subscribe(
+          val => {
+            console.log(`magnetometer value ${val}`);
+//             setGyro(val);
+          },
+          error => {
+            console.log('The sensor is not available');
+          },
+        );
+
+      setMagnetSubscription(newMagnetSubscription);
+      setMagnetStatus(true);
+    };
+
   useEffect(() => {
-    startNewSubsciption();
+//     startNewSubscription();
   }, []);
 
   return (
     <SafeAreaProvider>
       <View style={style.title}>
-        <Text style={style.bigText}>Hello World</Text>
         <Text>Current Speed: {speed}</Text>
         <Button
           title={(subscriptionStatus ? 'Stop' : 'Start') + ' Monitoring Speed'}
@@ -58,7 +110,33 @@ const TestingScreen = ({route, navigation}: Props) => {
               subscription?.unsubscribe();
               setSubscriptionStatus(false);
             } else {
-              startNewSubsciption();
+              startNewSubscription();
+            }
+          }}
+        />
+        <Text>Current Gyroscope: {gyro}</Text>
+        <Button
+          title={(gyroSubscription ? 'Stop' : 'Start') + ' Monitoring Gyroscope'}
+          onPress={() => {
+            console.log('Pressed');
+            if (gyroStatus) {
+              gyroSubscription?.unsubscribe();
+              setGyroStatus(false);
+            } else {
+              startNewGyroSubscription();
+            }
+          }}
+        />
+        <Text>Current Magnetometer: {angle}</Text>
+        <Button
+          title={(magnetSubscription ? 'Stop' : 'Start') + ' Monitoring Magnetometer'}
+          onPress={() => {
+            console.log('Pressed');
+            if (magnetStatus) {
+              magnetSubscription?.unsubscribe();
+              setMagnetStatus(false);
+            } else {
+              startNewMagnetSubscription();
             }
           }}
         />

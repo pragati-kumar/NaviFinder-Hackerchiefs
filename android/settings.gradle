@@ -1,4 +1,4 @@
-rootProject.name = 'FirstProject'
+rootProject.name = 'SIH2022'
 include ':react-native-wifi-reborn'
 project(':react-native-wifi-reborn').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wifi-reborn/android')
 include ':react-native-vector-icons'
