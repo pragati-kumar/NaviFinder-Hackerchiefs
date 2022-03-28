@@ -28,21 +28,8 @@ const Disaster = () => {
     <SafeAreaProvider>
       {/* <StatusBar />
       <Text>Hello World</Text> */}
-      <View>
-      <TouchableHighlight
-        underlayColor="#FFFFFF"
-        style={[
-          styles.toggleBtn
-        ]}
-        >
-        <Text
-        style={[
-          styles.toggleText
-        ]}>
-          {' '}
-          Panic Btn{' '}
-        </Text>
-      </TouchableHighlight>
+      <View style={styles.toggleBtn}>
+      <Button  color="red" title="Panic Button" />
       </View>
     </SafeAreaProvider>
   );
@@ -50,16 +37,12 @@ const Disaster = () => {
 
 const styles = StyleSheet.create({
   toggleBtn: {
-    color: 'red',
     padding: 12,
     width: '50%',
-  },
-  toggleText: {
-    alignSelf: 'center',
-    fontSize: 15,
-    color: '#8E91A5',
-    fontWeight: 'bold',
-  },
+    marginTop:'2%',
+    marginLeft:'25%'
+  }
+
 });
 
 export default Disaster;
