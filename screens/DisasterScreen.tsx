@@ -21,6 +21,8 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Header} from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
 
+import {Icon} from 'react-native-elements';
+import {NavigationBar} from './NavigationBar.tsx';
 
 const Disaster = () => {
 
@@ -43,21 +45,49 @@ const Disaster = () => {
       {/* <StatusBar />
       <Text>Hello World</Text> */}
       <View>
-        <View style={styles.toggleBtn}>
 
+        <View style={styles.toggleBtn}>
         <Button  color="red" title="Panic Button" onPress={createAlert}/>
         </View>
 
-        <Image source={require('./32600.jpg')} style={{width: "100%", height: "90%"}}/>
+        <Image source={require('./32600.jpg')} style={{width: "100%", height: "80%"}}/>
 
       </View>
 
+        <View style={styles.navbar}>
+
+          <View style={styles.ic}>
+            <Icon color="#8E91A5" name="map" type="font-awesome" />
+            <Text style={styles.icText}> Explore </Text>
+          </View>
+
+          <View style={styles.ic}>
+            <Icon color="#8E91A5" name="person" />
+            <Text style={styles.icText}> Profile </Text>
+          </View>
+
+          <View style={styles.ic}>
+            <Icon color="#8E91A5" name="bars" type="font-awesome" />
+            <Text style={styles.icText}> More </Text>
+          </View>
+
+      </View>
 
     </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
+
+  map: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    backgroundColor: '#F0F1F3',
+  },
+
   toggleBtn: {
     padding: 2,
     width: '50%',
@@ -65,7 +95,42 @@ const styles = StyleSheet.create({
     marginLeft:'25%',
     marginBottom:'5%',
     borderRadius: 20,
-  }
+  },
+  ic: {
+    color: '#8E91A5',
+    width: 60,
+    paddingTop:15
+  },
+  icText: {
+    color: '#8E91A5',
+    fontFamily: 'sans-serif',
+    alignSelf: 'center',
+  },
+  navbar: {
+    backgroundColor: '#FFFFFF',
+    verticalAlign: 'bottom',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    height:'9%',
+    width: '100%',
+  },
+  navigate: {
+    width: 60,
+    height: 60,
+    backgroundColor: '#EA3924',
+    borderRadius: 100,
+    marginTop: -18,
+    elevation: 5,
+    paddingTop: 17,
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    shadowOffset: {
+      height: 0,
+      width: 0,
+    },
+  },
 
 });
 
