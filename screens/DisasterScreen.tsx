@@ -22,7 +22,7 @@ import {Header} from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
 
 import {Icon} from 'react-native-elements';
-import {NavigationBar} from './NavigationBar.tsx';
+// import {NavigationBar} from './NavigationBar.tsx';
 
 const Disaster = () => {
 
@@ -54,11 +54,21 @@ const Disaster = () => {
 
       </View>
 
-        <View style={styles.navbar}>
-
+      <View style={styles.navbar}>
           <View style={styles.ic}>
             <Icon color="#8E91A5" name="map" type="font-awesome" />
             <Text style={styles.icText}> Explore </Text>
+          </View>
+
+          <TouchableWithoutFeedback>
+            <View style={styles.ic}>
+              <Icon color="#8E91A5" name="warning" />
+              <Text style={styles.icText}> Panic </Text>
+            </View>
+          </TouchableWithoutFeedback>
+
+          <View style={styles.navigate}>
+            <Icon color="white" name="location-arrow" type="font-awesome" />
           </View>
 
           <View style={styles.ic}>
@@ -70,8 +80,7 @@ const Disaster = () => {
             <Icon color="#8E91A5" name="bars" type="font-awesome" />
             <Text style={styles.icText}> More </Text>
           </View>
-
-      </View>
+        </View>
 
     </SafeAreaProvider>
   );

@@ -121,7 +121,7 @@ const HomeScreen = ({route, navigation}: Props) => {
         // console.log("RSSI_____",rssi) ;
         axios
           .post(
-            'http://192.168.0.101:4000/location/indoor',
+            'http://192.168.29.74:4000/location/indoor',
             {
               rssi: level,
               trial,
@@ -216,7 +216,7 @@ const HomeScreen = ({route, navigation}: Props) => {
       //   });
       await axios
         .post(
-          'http://192.168.0.101:4000/location/outdoor',
+          'http://192.168.29.74:4000/location/outdoor',
           {
             latitude: location?.latitude ?? 0,
             longitude: location?.longitude ?? 0,
