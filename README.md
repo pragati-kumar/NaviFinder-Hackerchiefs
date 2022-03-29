@@ -4,6 +4,11 @@
 
 This guide assumes, node, npx, react-native cli have been installed
 
+- [Node](https://nodejs.org/en/download/)
+- [React Native CLI](https://reactnative.dev/docs/environment-setup)
+
+:bangbang: **Important**: This application uses native sensors, expo client doesnt offer that functionality, choose the "React Native CLI Quickstart" path :bangbang:
+
 #### Basic Setup
 
 - Clone this repository
