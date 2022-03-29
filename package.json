@@ -25,10 +25,12 @@
     "react-native-get-location": "^2.2.1",
     "react-native-location": "^2.5.0",
     "react-native-maps": "^0.30.1",
+    "react-native-plotly": "^6.0.0",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^3.13.1",
     "react-native-sensors": "^7.3.5",
     "react-native-vector-icons": "^9.1.0",
+    "react-native-webview": "^11.17.2",
     "react-native-wifi-reborn": "^4.5.0"
   },
   "devDependencies": {

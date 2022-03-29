@@ -43,13 +43,13 @@ import {Icon} from 'react-native-elements';
 import axios from 'axios';
 import DeviceInfo from 'react-native-device-info';
 import {Marker} from 'react-native-maps';
-
+import Plotly from 'react-native-plotly';
 
 const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Outdoor');
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
-  const [rssi,setRssi] = useState(0) ;
+  const [rssi, setRssi] = useState(0);
   const token =
     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI2MjQxZWQzZDQ3ZDlhN2NkMTI4MDNiNWEiLCJwaG9uZSI6Ijk2NTA4NjY5OTMifQ.rECSBX_ORiy0p0Mn0fX5NYLHUZ2mJMpXqj1cN0S4n5U';
   RNLocation.configure({
@@ -90,11 +90,11 @@ const HomeScreen = ({route, navigation}: Props) => {
             console.log('Cannot get current BSSSID!');
           },
         );
-  
+
         WifiManager.getCurrentSignalStrength().then(
           level => {
-            setRssi(level) ;
-            console.log(level) ;
+            setRssi(level);
+            console.log(level);
             console.log('Your current connected wifi RSSI is ' + rssi);
           },
           () => {
@@ -102,50 +102,57 @@ const HomeScreen = ({route, navigation}: Props) => {
           },
         );
       } else {
-        console.log('You will not able to retrieve wifi available networks list');
+        console.log(
+          'You will not able to retrieve wifi available networks list',
+        );
       }
     } catch (err) {
       console.warn('err:***', err);
     }
   };
 
-  const reqIndoorCoordinates = async (trial:boolean) => {
+  const reqIndoorCoordinates = async (trial: boolean) => {
     // requestWifiPermission() ;
     WifiManager.getCurrentSignalStrength().then(
       level => {
-        setRssi(level) ;
+        setRssi(level);
         // console.log(level) ;
         // console.log('Your current connected wifi RSSI is ' + rssi);
         // console.log("RSSI_____",rssi) ;
-        axios.post('http://192.168.29.74:4000/location/indoor',
-        {
-          rssi: level,
-          trial,
-        },
-        {
-          headers: {
-            'x-auth-token': token,
-          },
-        }).then( res => {
-          console.log("-------") ;
-          console.log(res.data) ;
-        }
-        ).catch(err => {
-          console.log(err.data ?? err) ;
-        }) ;
+        axios
+          .post(
+            'http://192.168.0.101:4000/location/indoor',
+            {
+              rssi: level,
+              trial,
+            },
+            {
+              headers: {
+                'x-auth-token': token,
+              },
+            },
+          )
+          .then(res => {
+            console.log('-------');
+            console.log(res.data);
+          })
+          .catch(err => {
+            console.log(err.data ?? err);
+          });
       },
       () => {
         console.log('Cannot get current RSSI!');
       },
     );
-    
-  }
-  
+  };
+
   const onPressButton2 = async () => {
     setSelected('Indoor');
-    await requestWifiPermission() ;
-    await reqIndoorCoordinates(true) ;
-    setInterval( () => {reqIndoorCoordinates(false)}, 900);
+    await requestWifiPermission();
+    await reqIndoorCoordinates(true);
+    setInterval(() => {
+      reqIndoorCoordinates(false);
+    }, 900);
   };
 
   const permissionHandle = async () => {
@@ -192,7 +199,7 @@ const HomeScreen = ({route, navigation}: Props) => {
       setLongitude(location?.longitude ?? 0);
       // await axios
       //   .post(
-      //     'http://192.168.29.74:4000/location/outdoor',
+      //     'http://192.168.0.101:4000/location/outdoor',
       //     {
       //       latitude,
       //       longitude,
@@ -209,7 +216,7 @@ const HomeScreen = ({route, navigation}: Props) => {
       //   });
       await axios
         .post(
-          'http://192.168.29.74:4000/location/outdoor',
+          'http://192.168.0.101:4000/location/outdoor',
           {
             latitude: location?.latitude ?? 0,
             longitude: location?.longitude ?? 0,
@@ -312,24 +319,64 @@ const HomeScreen = ({route, navigation}: Props) => {
           </TouchableHighlight>
         </View>
         <View style={styles.mp}>
-          <MapView
-            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-            style={styles.mpview}
-            region={{
-              latitude,
-              longitude,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121,
-            }}>
-            <Marker
-              coordinate={{
+          {selected == 'Outdoor' ? (
+            <MapView
+              provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+              style={styles.mpview}
+              region={{
                 latitude,
                 longitude,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121,
+              }}>
+              <Marker
+                coordinate={{
+                  latitude,
+                  longitude,
+                  latitudeDelta: 0.015,
+                  longitudeDelta: 0.0121,
+                }}
+              />
+            </MapView>
+          ) : (
+            <Plotly
+              // data={[trace]}
+              // layout={{ title: 'Plotly.js running in React Native!' }}
+              style={{borderWidth: 1, borderColor: 'green'}}
+              data={[
+                {
+                  x: [4, 5, 6],
+                  y: [8, 9, 10],
+                  z: [4, 5, 8],
+                  type: 'scatter3d',
+                  mode: 'lines+markers',
+                  marker: {color: 'red'},
+                  scene: 'scene3',
+                },
+              ]}
+              layout={{
+                // width: '100%',
+                // height: 900,
+                title: 'Fancy Plot',
+                scene3: {
+                  domain: {
+                    x: [0.5, 0.99],
+                    y: [0.5, 1],
+                  },
+                  camera: {
+                    center: {x: 0, y: 0, z: 0},
+                    eye: {x: 2.5, y: 0.1, z: 0.1},
+                    up: {x: 0, y: 0, z: 1},
+                  },
+                },
               }}
+              // update={update}
+              // onLoad={() => setLoading(false)}
+              // debug
+              // key={resetKey}
+              enableFullPlotly
             />
-          </MapView>
+          )}
         </View>
 
         {/* <Button
