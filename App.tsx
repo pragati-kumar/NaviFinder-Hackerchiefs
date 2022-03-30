@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import TestingScreen from './screens/TestingScreen';
+import DisasterScreen from './screens/DisasterScreen';
 import {RootStackParamList} from './types';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Alert, StatusBar, Text} from 'react-native';
@@ -63,6 +64,7 @@ const App = () => {
         <RootStack.Navigator
           initialRouteName="Home"
           screenOptions={{headerShown: false}}>
+          <RootStack.Screen name="Disaster" component={DisasterScreen} />
           <RootStack.Screen name="Testing" component={TestingScreen} />
           <RootStack.Screen name="Home" component={HomeScreen} />
         </RootStack.Navigator>
