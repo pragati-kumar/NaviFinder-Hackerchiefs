@@ -25,6 +25,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Alert,
+  AsyncStorage
 } from 'react-native';
 import RNLocation from 'react-native-location';
 // import style from '../assets/css/home.css' ;
@@ -51,6 +52,7 @@ const HomeScreen = ({route, navigation}: Props) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [rssi, setRssi] = useState(0);
+  const [pinCode,setPincode] = useState(0);
   const token =
     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI2MjQxZWQzZDQ3ZDlhN2NkMTI4MDNiNWEiLCJwaG9uZSI6Ijk2NTA4NjY5OTMifQ.rECSBX_ORiy0p0Mn0fX5NYLHUZ2mJMpXqj1cN0S4n5U';
   RNLocation.configure({
@@ -208,6 +210,7 @@ const HomeScreen = ({route, navigation}: Props) => {
     // // res is an Array of geocoding object (see below)
     //         console.log('PIN CODE ------------ ');
     //         console.log(res[0].postalCode);
+    //         AsyncStorage.setItem('pin_code',res[0].postalCode);
     //   })
     //   .catch(err => console.log(err))
 
@@ -261,6 +264,7 @@ const HomeScreen = ({route, navigation}: Props) => {
         // res is an Array of geocoding object (see below)
                 console.log('PIN CODE ------------ ');
                 console.log(res[0].postalCode);
+                AsyncStorage.setItem('pin_code',res[0].postalCode);
           })
           .catch(err => console.log(err))
 
@@ -295,6 +299,13 @@ const HomeScreen = ({route, navigation}: Props) => {
   //       });
   //     };
 
+  const pincode = async () =>{
+    let pin_code =await AsyncStorage.getItem('pin_code');
+
+    console.log('Local storage pin code -> '+pin_code);
+    setPincode(pin_code);
+  }
+
   useEffect(() => {
     permissionHandle();
     // bluetoothInstance.onStateChange((state) => {
@@ -303,7 +314,9 @@ const HomeScreen = ({route, navigation}: Props) => {
     //     scanAndConnect();
     //   }
     // }, true);
+    pincode();
     console.log(DeviceInfo.getModel());
+
   }, []);
 
   return (
