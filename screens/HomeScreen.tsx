@@ -44,6 +44,7 @@ import axios from 'axios';
 import DeviceInfo from 'react-native-device-info';
 import {Marker} from 'react-native-maps';
 import Plotly from 'react-native-plotly';
+import Geocoder from 'react-native-geocoder';
 
 const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Outdoor');
@@ -197,6 +198,19 @@ const HomeScreen = ({route, navigation}: Props) => {
       );
       setLatitude(location?.latitude ?? 0);
       setLongitude(location?.longitude ?? 0);
+
+    //   const NY={
+    //     lat:location?.latitude ?? 0,
+    //     lng:location?.longitude ?? 0
+    //   }
+    //
+    //   Geocoder.geocodePosition(NY).then(res => {
+    // // res is an Array of geocoding object (see below)
+    //         console.log('PIN CODE ------------ ');
+    //         console.log(res[0].postalCode);
+    //   })
+    //   .catch(err => console.log(err))
+
       // await axios
       //   .post(
       //     'http://192.168.0.101:4000/location/outdoor',
@@ -237,6 +251,19 @@ const HomeScreen = ({route, navigation}: Props) => {
 
           setLatitude(latitude);
           setLongitude(longitude);
+
+          const NY={
+            lat:latitude,
+            lng:longitude
+          }
+
+          Geocoder.geocodePosition(NY).then(res => {
+        // res is an Array of geocoding object (see below)
+                console.log('PIN CODE ------------ ');
+                console.log(res[0].postalCode);
+          })
+          .catch(err => console.log(err))
+
         })
         .catch(function (error) {
           // handle error

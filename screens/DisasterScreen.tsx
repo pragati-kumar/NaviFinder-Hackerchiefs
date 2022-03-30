@@ -15,29 +15,27 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Alert,
-  Image
+  Image,
 } from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Header} from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
 
 import {Icon} from 'react-native-elements';
-import {NavigationBar} from './NavigationBar.tsx';
 
 const Disaster = () => {
-
   const createAlert = () =>
     Alert.alert(
-      "",
-      "Are you sure you want to broadcast your location to nearby Rescue Authorities?",
+      '',
+      'Are you sure you want to broadcast your location to nearby Rescue Authorities?',
       [
         {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
         },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
-      ]
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
     );
 
   return (
@@ -45,40 +43,37 @@ const Disaster = () => {
       {/* <StatusBar />
       <Text>Hello World</Text> */}
       <View>
-
         <View style={styles.toggleBtn}>
-        <Button  color="red" title="Panic Button" onPress={createAlert}/>
+          <Button color="red" title="Panic Button" onPress={createAlert} />
         </View>
 
-        <Image source={require('./32600.jpg')} style={{width: "100%", height: "80%"}}/>
-
+        <Image
+          source={require('./32600.jpg')}
+          style={{width: '100%', height: '80%'}}
+        />
       </View>
 
-        <View style={styles.navbar}>
+      <View style={styles.navbar}>
+        <View style={styles.ic}>
+          <Icon color="#8E91A5" name="map" type="font-awesome" />
+          <Text style={styles.icText}> Explore </Text>
+        </View>
 
-          <View style={styles.ic}>
-            <Icon color="#8E91A5" name="map" type="font-awesome" />
-            <Text style={styles.icText}> Explore </Text>
-          </View>
+        <View style={styles.ic}>
+          <Icon color="#8E91A5" name="person" />
+          <Text style={styles.icText}> Profile </Text>
+        </View>
 
-          <View style={styles.ic}>
-            <Icon color="#8E91A5" name="person" />
-            <Text style={styles.icText}> Profile </Text>
-          </View>
-
-          <View style={styles.ic}>
-            <Icon color="#8E91A5" name="bars" type="font-awesome" />
-            <Text style={styles.icText}> More </Text>
-          </View>
-
+        <View style={styles.ic}>
+          <Icon color="#8E91A5" name="bars" type="font-awesome" />
+          <Text style={styles.icText}> More </Text>
+        </View>
       </View>
-
     </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
-
   map: {
     height: '100%',
     width: '100%',
@@ -91,15 +86,15 @@ const styles = StyleSheet.create({
   toggleBtn: {
     padding: 2,
     width: '50%',
-    marginTop:'5%',
-    marginLeft:'25%',
-    marginBottom:'5%',
+    marginTop: '5%',
+    marginLeft: '25%',
+    marginBottom: '5%',
     borderRadius: 20,
   },
   ic: {
     color: '#8E91A5',
     width: 60,
-    paddingTop:15
+    paddingTop: 15,
   },
   icText: {
     color: '#8E91A5',
@@ -112,7 +107,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    height:'9%',
+    height: '9%',
     width: '100%',
   },
   navigate: {
@@ -131,7 +126,6 @@ const styles = StyleSheet.create({
       width: 0,
     },
   },
-
 });
 
 export default Disaster;
