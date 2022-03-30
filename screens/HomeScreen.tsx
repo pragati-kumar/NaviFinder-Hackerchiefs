@@ -122,7 +122,7 @@ const HomeScreen = ({route, navigation}: Props) => {
         // console.log("RSSI_____",rssi) ;
         axios
           .post(
-            'http://192.168.0.101:4000/location/indoor',
+            'http://192.168.140.136:4000/location/indoor',
             {
               rssi: level,
               trial,
@@ -202,7 +202,7 @@ const HomeScreen = ({route, navigation}: Props) => {
       setLongitude(location?.longitude ?? 0);
       await axios
         .post(
-          'http://192.168.0.101:4000/location/outdoor',
+          'http://192.168.140.136:4000/location/outdoor',
           {
             latitude: location?.latitude ?? 0,
             longitude: location?.longitude ?? 0,
@@ -331,8 +331,8 @@ const HomeScreen = ({route, navigation}: Props) => {
               style={{borderWidth: 1, borderColor: 'green'}}
               data={[
                 {
-                  x: [indoorLocation.x, 5, 6],
-                  y: [indoorLocation.y, 9, 10],
+                  x: [indoorLocation.x / 10, 5, 6],
+                  y: [indoorLocation.y / 10, 9, 10],
                   z: [indoorLocation.floor, 5, 8],
                   text: ['You', 'Target 1', 'Target 2'],
                   textposition: 'bottom',
@@ -353,7 +353,7 @@ const HomeScreen = ({route, navigation}: Props) => {
                   },
                   camera: {
                     center: {x: 0, y: 0, z: 0},
-                    eye: {x: 2.5, y: 0.1, z: 0.1},
+                    eye: {x: 1.5, y: 1.2, z: 1.5},
                     up: {x: 0, y: 0, z: 1},
                   },
                 },
