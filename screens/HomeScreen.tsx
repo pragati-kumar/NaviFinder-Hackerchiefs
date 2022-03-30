@@ -49,6 +49,7 @@ const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Outdoor');
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [indoorLocation, setIndoorLocation] = useState({x: 0, y: 0, floor: 0});
   const [rssi, setRssi] = useState(0);
   const token =
     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI2MjQxZWQzZDQ3ZDlhN2NkMTI4MDNiNWEiLCJwaG9uZSI6Ijk2NTA4NjY5OTMifQ.rECSBX_ORiy0p0Mn0fX5NYLHUZ2mJMpXqj1cN0S4n5U';
@@ -135,6 +136,8 @@ const HomeScreen = ({route, navigation}: Props) => {
           .then(res => {
             console.log('-------');
             console.log(res.data);
+
+            setIndoorLocation(res.data);
           })
           .catch(err => {
             console.log(err.data ?? err);
@@ -197,23 +200,6 @@ const HomeScreen = ({route, navigation}: Props) => {
       );
       setLatitude(location?.latitude ?? 0);
       setLongitude(location?.longitude ?? 0);
-      // await axios
-      //   .post(
-      //     'http://192.168.0.101:4000/location/outdoor',
-      //     {
-      //       latitude,
-      //       longitude,
-      //       modelName: DeviceInfo.getModel(),
-      //     },
-      //     {
-      //       headers: {
-      //         'x-auth-token': token,
-      //       },
-      //     },
-      //   )
-      //   .then(res => {
-      //     console.log(res.data);
-      //   });
       await axios
         .post(
           'http://192.168.0.101:4000/location/outdoor',
@@ -345,9 +331,9 @@ const HomeScreen = ({route, navigation}: Props) => {
               style={{borderWidth: 1, borderColor: 'green'}}
               data={[
                 {
-                  x: [4, 5, 6],
-                  y: [8, 9, 10],
-                  z: [4, 5, 8],
+                  x: [indoorLocation.x, 5, 6],
+                  y: [indoorLocation.y, 9, 10],
+                  z: [indoorLocation.floor, 5, 8],
                   text: ['You', 'Target 1', 'Target 2'],
                   textposition: 'bottom',
                   type: 'scatter3d',
