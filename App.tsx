@@ -11,6 +11,7 @@ import {Alert, StatusBar, Text} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 //import {Notifications} from 'react-native-notifications';
 import notifee from '@notifee/react-native';
+import {log} from './utils/appLogger';
 
 async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
@@ -19,7 +20,7 @@ async function requestUserPermission() {
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
   if (enabled) {
-    console.log('Authorization status:', authStatus);
+    log('Authorization status:', authStatus);
   }
 }
 
@@ -27,7 +28,7 @@ async function initFirebase() {
   await requestUserPermission();
 
   messaging().setBackgroundMessageHandler(async remoteMessage => {
-    console.log('Message handled in the background!', remoteMessage);
+    log('Message handled in the background!', remoteMessage);
   });
 
   const unsubscribe = messaging().onMessage(async remoteMessage => {

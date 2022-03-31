@@ -39,6 +39,7 @@ import Plotly from 'react-native-plotly';
 import Geocoder from 'react-native-geocoder';
 import messaging from '@react-native-firebase/messaging';
 import {API_URL} from '../utils/global';
+import {log} from '../utils/appLogger';
 
 const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Outdoor');
@@ -71,8 +72,8 @@ const HomeScreen = ({route, navigation}: Props) => {
       },
     );
 
-    console.log('-------');
-    console.log(res.data);
+    log('-------');
+    log(res.data);
   };
 
   const onPressButton2 = async () => {
@@ -90,7 +91,7 @@ const HomeScreen = ({route, navigation}: Props) => {
     if (permission.includes('authorized')) {
       const location = await RNLocation.getLatestLocation({timeout: 100});
 
-      console.log(
+      log(
         location,
         location?.longitude,
         location?.latitude,
@@ -114,7 +115,7 @@ const HomeScreen = ({route, navigation}: Props) => {
         },
       );
 
-      console.log(response.data);
+      log(response.data);
 
       const {latitude, longitude} = response.data;
 
@@ -129,13 +130,15 @@ const HomeScreen = ({route, navigation}: Props) => {
       const positions = await Geocoder.geocodePosition(NY);
 
       // res is an Array of geocoding object (see below)
-      console.log('PIN CODE ------------ ');
-      console.log(positions[0].postalCode);
+      log('PIN CODE ------------ ');
+      log(positions[0].postalCode);
 
       const lastPincode = await pincode();
 
       if (positions[0].postalCode != lastPincode) {
-        await messaging().unsubscribeFromTopic(lastPincode!);
+        // log(lastPincode, positions[0].postalCode);
+        if (lastPincode != '')
+          await messaging().unsubscribeFromTopic(lastPincode!);
         await messaging().subscribeToTopic(positions[0].postalCode);
       }
 
@@ -146,7 +149,7 @@ const HomeScreen = ({route, navigation}: Props) => {
   const pincode = async () => {
     const pin_code = (await AsyncStorage.getItem('pin_code')) ?? '';
 
-    console.log('Local storage pin code -> ' + pin_code);
+    log('Local storage pin code -> ' + pin_code);
 
     return pin_code;
   };

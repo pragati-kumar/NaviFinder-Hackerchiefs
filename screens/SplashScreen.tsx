@@ -5,6 +5,7 @@ import {Image} from 'react-native-elements';
 import {RootStackParamList} from '../types';
 import WifiManager from 'react-native-wifi-reborn';
 import RNLocation from 'react-native-location';
+import {log} from '../utils/appLogger';
 
 const SplashScreen = ({navigation, route}: Props) => {
   const requestLocationPermission = async () => {
@@ -37,36 +38,34 @@ const SplashScreen = ({navigation, route}: Props) => {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('Thank you for your permission! :)');
+        log('Thank you for your permission! :)');
         WifiManager.getCurrentWifiSSID().then(
           ssid => {
-            console.log('Your current connected wifi SSID is ' + ssid);
+            log('Your current connected wifi SSID is ' + ssid);
           },
           () => {
-            console.log('Cannot get current SSID!');
+            log('Cannot get current SSID!');
           },
         );
         WifiManager.getBSSID().then(
           bssid => {
-            console.log('Your current connected wifi BSSID is ' + bssid);
+            log('Your current connected wifi BSSID is ' + bssid);
           },
           () => {
-            console.log('Cannot get current BSSSID!');
+            log('Cannot get current BSSSID!');
           },
         );
 
         WifiManager.getCurrentSignalStrength().then(
           level => {
-            console.log('Your current connected wifi RSSI is ' + level);
+            log('Your current connected wifi RSSI is ' + level);
           },
           () => {
-            console.log('Cannot get current RSSI!');
+            log('Cannot get current RSSI!');
           },
         );
       } else {
-        console.log(
-          'You will not able to retrieve wifi available networks list',
-        );
+        log('You will not able to retrieve wifi available networks list');
       }
     } catch (err) {
       console.warn('err:***', err);

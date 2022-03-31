@@ -1,7 +1,5 @@
-import {APP_ENV} from "react-native-dotenv"; 
-
-const log = (o) => {
-    if(APP_ENV == "development") {
+const log = (...o) => {
+    if(__DEV__) {
         console.log("-------------------------");
         console.log("🐛", ...o);
         console.log("-------------------------");
