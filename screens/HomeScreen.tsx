@@ -46,6 +46,7 @@ import DeviceInfo from 'react-native-device-info';
 import {Marker} from 'react-native-maps';
 import Plotly from 'react-native-plotly';
 import Geocoder from 'react-native-geocoder';
+import messaging from '@react-native-firebase/messaging';
 
 const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Outdoor');
@@ -261,10 +262,19 @@ const HomeScreen = ({route, navigation}: Props) => {
           };
 
           Geocoder.geocodePosition(NY)
-            .then(res => {
+            .then(async res => {
               // res is an Array of geocoding object (see below)
               console.log('PIN CODE ------------ ');
               console.log(res[0].postalCode);
+
+              const lastPincode = await pincode();
+
+              if(res[0].postalCode != lastPincode) {
+                messaging().unsubscribeFromTopic(lastPincode!);
+                messaging().subscribeToTopic(res[0].postalCode);
+
+              }
+
               AsyncStorage.setItem('pin_code', res[0].postalCode);
             })
             .catch(err => console.log(err));
@@ -303,7 +313,8 @@ const HomeScreen = ({route, navigation}: Props) => {
     const pin_code = (await AsyncStorage.getItem('pin_code')) ?? '';
 
     console.log('Local storage pin code -> ' + pin_code);
-    setPincode(pin_code);
+
+    return pinCode;
   };
 
   useEffect(() => {
