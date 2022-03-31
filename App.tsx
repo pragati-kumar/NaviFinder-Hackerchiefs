@@ -12,6 +12,7 @@ import messaging from '@react-native-firebase/messaging';
 //import {Notifications} from 'react-native-notifications';
 import notifee from '@notifee/react-native';
 import {log} from './utils/appLogger';
+import LocShare from './screens/LocShare';
 
 async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
@@ -70,6 +71,7 @@ const App = () => {
           <RootStack.Screen name="Testing" component={TestingScreen} />
           <RootStack.Screen name="Home" component={HomeScreen} />
           <RootStack.Screen name="Splash" component={SplashScreen} />
+          <RootStack.Screen name="LocShare" component={LocShare} />
         </RootStack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

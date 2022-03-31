@@ -5,4 +5,5 @@ export type RootStackParamList = {
   Splash: undefined;
   Register: undefined;
   Login: undefined;
+  LocShare: undefined;
 };
