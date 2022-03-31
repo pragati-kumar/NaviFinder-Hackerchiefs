@@ -190,7 +190,6 @@ const HomeScreen = ({route, navigation}: Props) => {
       const location = await RNLocation.getLatestLocation({timeout: 100});
       setLatitude(location?.latitude ?? 0);
       setLongitude(location?.longitude ?? 0);
-      // console.log(location, location?.longitude, location?.latitude,location?.timestamp)
     } else {
       const location = await RNLocation.getLatestLocation({timeout: 100});
       console.log(
@@ -202,36 +201,6 @@ const HomeScreen = ({route, navigation}: Props) => {
       setLatitude(location?.latitude ?? 0);
       setLongitude(location?.longitude ?? 0);
 
-      //   const NY={
-      //     lat:location?.latitude ?? 0,
-      //     lng:location?.longitude ?? 0
-      //   }
-      //
-      //   Geocoder.geocodePosition(NY).then(res => {
-      // // res is an Array of geocoding object (see below)
-      //         console.log('PIN CODE ------------ ');
-      //         console.log(res[0].postalCode);
-      //         AsyncStorage.setItem('pin_code',res[0].postalCode);
-      //   })
-      //   .catch(err => console.log(err))
-
-      // await axios
-      //   .post(
-      //     'http://192.168.0.101:4000/location/outdoor',
-      //     {
-      //       latitude,
-      //       longitude,
-      //       modelName: DeviceInfo.getModel(),
-      //     },
-      //     {
-      //       headers: {
-      //         'x-auth-token': token,
-      //       },
-      //     },
-      //   )
-      //   .then(res => {
-      //     console.log(res.data);
-      //   });
       await axios
         .post(
           'http://192.168.0.101:4000/location/outdoor',
@@ -269,10 +238,9 @@ const HomeScreen = ({route, navigation}: Props) => {
 
               const lastPincode = await pincode();
 
-              if(res[0].postalCode != lastPincode) {
+              if (res[0].postalCode != lastPincode) {
                 messaging().unsubscribeFromTopic(lastPincode!);
                 messaging().subscribeToTopic(res[0].postalCode);
-
               }
 
               AsyncStorage.setItem('pin_code', res[0].postalCode);
@@ -289,25 +257,6 @@ const HomeScreen = ({route, navigation}: Props) => {
         });
     }
   };
-  //   const bluetoothInstance = new BleManager();
-
-  //     const scanAndConnect = () => {
-  //       bluetoothInstance.startDeviceScan(null, { allowDuplicates: true }, (error, device) => {
-  //         console.log('device', device);
-  //         console.log('error', error);
-  //         if (error) {
-  //           // Handle error (scanning will be stopped automatically)
-  //           return;
-  //         }
-  //
-  //         console.log("**"+ device?.name) ;
-  //         if (device?.name === 'MyProjectName') {
-  //           bluetoothInstance.stopDeviceScan();
-  //         } else {
-  //           // bluetoothInstance.stopDeviceScan();
-  //         }
-  //       });
-  //     };
 
   const pincode = async () => {
     const pin_code = (await AsyncStorage.getItem('pin_code')) ?? '';
@@ -319,12 +268,6 @@ const HomeScreen = ({route, navigation}: Props) => {
 
   useEffect(() => {
     permissionHandle();
-    // bluetoothInstance.onStateChange((state) => {
-    //   console.log('state', state);
-    //   if (state === 'PoweredOn') {
-    //     scanAndConnect();
-    //   }
-    // }, true);
     pincode();
     console.log(DeviceInfo.getModel());
   }, []);

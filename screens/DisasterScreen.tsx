@@ -48,7 +48,7 @@ const Disaster = () => {
         </View>
 
         <Image
-          source={require('./32600.jpg')}
+          source={require('../assets/images/32600.jpg')}
           style={{width: '100%', height: '80%'}}
         />
       </View>
