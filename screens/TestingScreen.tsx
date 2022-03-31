@@ -14,20 +14,21 @@ import {
 } from 'react-native-sensors';
 import {map, filter} from 'rxjs/operators';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {log} from '../utils/appLogger';
 
 setUpdateIntervalForType(SensorTypes.accelerometer, 1000); // defaults to 100ms
 setUpdateIntervalForType(SensorTypes.gyroscope, 1000); // defaults to 100ms
 
 const TestingScreen = ({route, navigation}: Props) => {
   const [speed, setSpeed] = useState(0);
-  const [gyro, setGyro] = useState(0) ;
-  const [angle,setAngle] = useState({x:0,y:0,z:0}) ;
+  const [gyro, setGyro] = useState(0);
+  const [angle, setAngle] = useState({x: 0, y: 0, z: 0});
   const [subscription, setSubscription] = useState<Subscription>();
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
   const [gyroSubscription, setGyroSubscription] = useState<Subscription>();
-  const [gyroStatus, setGyroStatus] = useState(false) ;
+  const [gyroStatus, setGyroStatus] = useState(false);
   const [magnetSubscription, setMagnetSubscription] = useState<Subscription>();
-  const [magnetStatus, setMagnetStatus] = useState(false) ;
+  const [magnetStatus, setMagnetStatus] = useState(false);
 
   const startNewSubscription = () => {
     const newSubscription = accelerometer
@@ -37,11 +38,11 @@ const TestingScreen = ({route, navigation}: Props) => {
       )
       .subscribe(
         speed => {
-          console.log(`You moved your phone with ${speed}`);
+          log(`You moved your phone with ${speed}`);
           setSpeed(speed);
         },
         error => {
-          console.log('The sensor is not available');
+          log('The sensor is not available');
         },
       );
 
@@ -49,18 +50,16 @@ const TestingScreen = ({route, navigation}: Props) => {
     setSubscriptionStatus(true);
   };
 
- const startNewGyroSubscription = () => {
+  const startNewGyroSubscription = () => {
     const newGyroSubscription = gyroscope
-      .pipe(
-        map(({x, y, z}) => x + y + z)
-      )
+      .pipe(map(({x, y, z}) => x + y + z))
       .subscribe(
         val => {
-          console.log(`Gyroscope value ${val}`);
+          log(`Gyroscope value ${val}`);
           setGyro(val);
         },
         error => {
-          console.log('The sensor is not available');
+          log('The sensor is not available');
         },
       );
 
@@ -69,31 +68,31 @@ const TestingScreen = ({route, navigation}: Props) => {
   };
 
   const startNewMagnetSubscription = () => {
-      const newMagnetSubscription = magnetometer
-        // .pipe(
-        //   map(({x, y, z}) => {
-        //     console.log(x) ;
-        //     console.log(y) ;
-        //     console.log(z) ;
-        //     return(x + y + z) ;
-        //   })
-        // )
-        .subscribe(
-          ({x,y,z}) => {
-            console.log(`magnetometer value ${x}, ${y}, ${z}`);
-            setAngle({x,y,z}) ;
-          },
-          error => {
-            console.log('The sensor is not available');
-          },
-        );
+    const newMagnetSubscription = magnetometer
+      // .pipe(
+      //   map(({x, y, z}) => {
+      //     log(x) ;
+      //     log(y) ;
+      //     log(z) ;
+      //     return(x + y + z) ;
+      //   })
+      // )
+      .subscribe(
+        ({x, y, z}) => {
+          log(`magnetometer value ${x}, ${y}, ${z}`);
+          setAngle({x, y, z});
+        },
+        error => {
+          log('The sensor is not available');
+        },
+      );
 
-      setMagnetSubscription(newMagnetSubscription);
-      setMagnetStatus(true);
-    };
+    setMagnetSubscription(newMagnetSubscription);
+    setMagnetStatus(true);
+  };
 
   useEffect(() => {
-//     startNewSubscription();
+    //     startNewSubscription();
   }, []);
 
   return (
@@ -103,7 +102,7 @@ const TestingScreen = ({route, navigation}: Props) => {
         <Button
           title={(subscriptionStatus ? 'Stop' : 'Start') + ' Monitoring Speed'}
           onPress={() => {
-            console.log('Pressed');
+            log('Pressed');
             if (subscriptionStatus) {
               subscription?.unsubscribe();
               setSubscriptionStatus(false);
@@ -114,9 +113,11 @@ const TestingScreen = ({route, navigation}: Props) => {
         />
         <Text>Current Gyroscope: {gyro}</Text>
         <Button
-          title={(gyroSubscription ? 'Stop' : 'Start') + ' Monitoring Gyroscope'}
+          title={
+            (gyroSubscription ? 'Stop' : 'Start') + ' Monitoring Gyroscope'
+          }
           onPress={() => {
-            console.log('Pressed');
+            log('Pressed');
             if (gyroStatus) {
               gyroSubscription?.unsubscribe();
               setGyroStatus(false);
@@ -126,9 +127,11 @@ const TestingScreen = ({route, navigation}: Props) => {
           }}
         />
         <Button
-          title={(magnetSubscription ? 'Stop' : 'Start') + ' Monitoring Magnetometer'}
+          title={
+            (magnetSubscription ? 'Stop' : 'Start') + ' Monitoring Magnetometer'
+          }
           onPress={() => {
-            console.log('Pressed');
+            log('Pressed');
             if (magnetStatus) {
               magnetSubscription?.unsubscribe();
               setMagnetStatus(false);
