@@ -18,6 +18,8 @@ target 'SIH2022' do
 
   pod 'react-native-location', :path => '../node_modules/react-native-location'
 
+  pod 'react-native-geocoder', :path => '../node_modules/react-native-geocoder'
+
   target 'SIH2022Tests' do
     inherit! :complete
     # Pods for testing

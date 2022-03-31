@@ -4,11 +4,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import TestingScreen from './screens/TestingScreen';
 import DisasterScreen from './screens/DisasterScreen';
+import SplashScreen from './screens/SplashScreen';
 import {RootStackParamList} from './types';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Alert, StatusBar, Text} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-//import { createStackNavigator } from "@react-navigation/stack";
+//import {Notifications} from 'react-native-notifications';
+import notifee from '@notifee/react-native';
 
 async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
@@ -24,8 +26,25 @@ async function requestUserPermission() {
 async function initFirebase() {
   await requestUserPermission();
 
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+    console.log('Message handled in the background!', remoteMessage);
+  });
+
   const unsubscribe = messaging().onMessage(async remoteMessage => {
-    Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    //Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: remoteMessage.notification?.title,
+      body: remoteMessage.notification?.body,
+      android: {
+        channelId,
+      },
+    });
   });
 
   return unsubscribe;
@@ -49,6 +68,7 @@ const App = () => {
           <RootStack.Screen name="Disaster" component={DisasterScreen} />
           <RootStack.Screen name="Testing" component={TestingScreen} />
           <RootStack.Screen name="Home" component={HomeScreen} />
+          <RootStack.Screen name="Splash" component={SplashScreen} />
         </RootStack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
