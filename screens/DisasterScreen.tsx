@@ -20,9 +20,10 @@ import {
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Header} from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
-
+import Toast from 'react-native-toast-message';
 import {Icon} from 'react-native-elements';
 import Navbar from './Navbar';
+import {log} from '../utils/appLogger';
 
 const Disaster = ({route, navigation}: Props) => {
   const createAlert = () =>
@@ -32,10 +33,24 @@ const Disaster = ({route, navigation}: Props) => {
       [
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
+          onPress: () => {
+            log('Cancel Pressed');
+          },
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        {
+          text: 'OK',
+          onPress: () => {
+            log('OK Pressed');
+            Toast.show({
+              position: 'top',
+              topOffset: 80,
+              type: 'success',
+              text1: 'Broadcasted',
+              text2: 'Authorities have been notified, help will be here soon',
+            });
+          },
+        },
       ],
     );
 
