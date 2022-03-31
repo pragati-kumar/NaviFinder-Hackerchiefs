@@ -28,18 +28,9 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNLocation from 'react-native-location';
-// import style from '../assets/css/home.css' ;
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
 import WifiManager from 'react-native-wifi-reborn';
-import {BleManager} from 'react-native-ble-plx';
 import {Icon} from 'react-native-elements';
 import axios from 'axios';
 import DeviceInfo from 'react-native-device-info';
@@ -53,7 +44,6 @@ const HomeScreen = ({route, navigation}: Props) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [rssi, setRssi] = useState(0);
-  const [pinCode, setPincode] = useState<string>();
   const token =
     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI2MjQxZWQzZDQ3ZDlhN2NkMTI4MDNiNWEiLCJwaG9uZSI6Ijk2NTA4NjY5OTMifQ.rECSBX_ORiy0p0Mn0fX5NYLHUZ2mJMpXqj1cN0S4n5U';
   RNLocation.configure({
@@ -62,136 +52,45 @@ const HomeScreen = ({route, navigation}: Props) => {
   const onPressButton = () => {
     setSelected('Outdoor');
   };
-  const requestWifiPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Cool Photo App Camera Permission',
-          message:
-            'Cool Photo App needs access to your camera ' +
-            'so you can take awesome pictures.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        // console.log('Thank you for your permission! :)');
-        WifiManager.getCurrentWifiSSID().then(
-          ssid => {
-            console.log('Your current connected wifi SSID is ' + ssid);
-          },
-          () => {
-            console.log('Cannot get current SSID!');
-          },
-        );
-        WifiManager.getBSSID().then(
-          bssid => {
-            console.log('Your current connected wifi BSSID is ' + bssid);
-          },
-          () => {
-            console.log('Cannot get current BSSSID!');
-          },
-        );
-
-        WifiManager.getCurrentSignalStrength().then(
-          level => {
-            setRssi(level);
-            console.log(level);
-            console.log('Your current connected wifi RSSI is ' + rssi);
-          },
-          () => {
-            console.log('Cannot get current RSSI!');
-          },
-        );
-      } else {
-        console.log(
-          'You will not able to retrieve wifi available networks list',
-        );
-      }
-    } catch (err) {
-      console.warn('err:***', err);
-    }
-  };
 
   const reqIndoorCoordinates = async (trial: boolean) => {
     // requestWifiPermission() ;
-    WifiManager.getCurrentSignalStrength().then(
-      level => {
-        setRssi(level);
-        // console.log(level) ;
-        // console.log('Your current connected wifi RSSI is ' + rssi);
-        // console.log("RSSI_____",rssi) ;
-        axios
-          .post(
-            'http://192.168.0.101:4000/location/indoor',
-            {
-              rssi: level,
-              trial,
-            },
-            {
-              headers: {
-                'x-auth-token': token,
-              },
-            },
-          )
-          .then(res => {
-            console.log('-------');
-            console.log(res.data);
-          })
-          .catch(err => {
-            console.log(err.data ?? err);
-          });
+    const level = await WifiManager.getCurrentSignalStrength();
+    setRssi(level);
+    const res = await axios.post(
+      'http://192.168.0.101:4000/location/indoor',
+      {
+        rssi: level,
+        trial,
       },
-      () => {
-        console.log('Cannot get current RSSI!');
+      {
+        headers: {
+          'x-auth-token': token,
+        },
       },
     );
+
+    console.log('-------');
+    console.log(res.data);
   };
 
   const onPressButton2 = async () => {
     setSelected('Indoor');
-    await requestWifiPermission();
+    // await requestWifiPermission();
     await reqIndoorCoordinates(true);
     setInterval(() => {
       reqIndoorCoordinates(false);
     }, 900);
   };
 
-  const permissionHandle = async () => {
-    // console.log('here') ;
+  const requestOutdoorCoordinates = async () => {
+    let permission = await RNLocation.getCurrentPermission();
 
-    let permission = await RNLocation.requestPermission({
-      ios: 'whenInUse',
-      android: {
-        detail: 'coarse',
-        rationale: {
-          title: 'We need to access your location',
-          message: 'We use your location to show where you are on the map',
-          buttonPositive: 'OK',
-          buttonNegative: 'Cancel',
-        },
-      },
-    });
-    if (!permission) {
-      permission = await RNLocation.requestPermission({
-        ios: 'whenInUse',
-        android: {
-          detail: 'coarse',
-          rationale: {
-            title: 'We need to access your location',
-            message: 'We use your location to show where you are on the map',
-            buttonPositive: 'OK',
-            buttonNegative: 'Cancel',
-          },
-        },
-      });
+    if (permission.includes('authorized')) {
       const location = await RNLocation.getLatestLocation({timeout: 100});
       setLatitude(location?.latitude ?? 0);
       setLongitude(location?.longitude ?? 0);
-    } else {
-      const location = await RNLocation.getLatestLocation({timeout: 100});
+
       console.log(
         location,
         location?.longitude,
@@ -201,60 +100,47 @@ const HomeScreen = ({route, navigation}: Props) => {
       setLatitude(location?.latitude ?? 0);
       setLongitude(location?.longitude ?? 0);
 
-      await axios
-        .post(
-          'http://192.168.0.101:4000/location/outdoor',
-          {
-            latitude: location?.latitude ?? 0,
-            longitude: location?.longitude ?? 0,
-            modelName: DeviceInfo.getModel(),
-            trial: true,
+      const response = await axios.post(
+        'http://192.168.0.101:4000/location/outdoor',
+        {
+          latitude: location?.latitude ?? 0,
+          longitude: location?.longitude ?? 0,
+          modelName: DeviceInfo.getModel(),
+          trial: true,
+        },
+        {
+          headers: {
+            'x-auth-token': token,
           },
-          {
-            headers: {
-              'x-auth-token': token,
-            },
-          },
-        )
-        .then(function (response) {
-          // handle success
-          console.log(response.data);
+        },
+      );
 
-          const {latitude, longitude} = response.data;
+      console.log(response.data);
 
-          setLatitude(latitude);
-          setLongitude(longitude);
+      const {latitude, longitude} = response.data;
 
-          const NY = {
-            lat: latitude,
-            lng: longitude,
-          };
+      setLatitude(latitude);
+      setLongitude(longitude);
 
-          Geocoder.geocodePosition(NY)
-            .then(async res => {
-              // res is an Array of geocoding object (see below)
-              console.log('PIN CODE ------------ ');
-              console.log(res[0].postalCode);
+      const NY = {
+        lat: latitude,
+        lng: longitude,
+      };
 
-              const lastPincode = await pincode();
+      const positions = await Geocoder.geocodePosition(NY);
 
-              if (res[0].postalCode != lastPincode) {
-                messaging().unsubscribeFromTopic(lastPincode!);
-                messaging().subscribeToTopic(res[0].postalCode);
-              }
+      // res is an Array of geocoding object (see below)
+      console.log('PIN CODE ------------ ');
+      console.log(positions[0].postalCode);
 
-              AsyncStorage.setItem('pin_code', res[0].postalCode);
-            })
-            .catch(err => console.log(err));
-        })
-        .catch(function (error) {
-          // handle error
-          console.log(error.message);
-        })
-        .finally(function () {
-          // always executed
-          console.log('Finally called');
-        });
+      const lastPincode = await pincode();
+
+      if (positions[0].postalCode != lastPincode) {
+        await messaging().unsubscribeFromTopic(lastPincode!);
+        await messaging().subscribeToTopic(positions[0].postalCode);
+      }
+
+      await AsyncStorage.setItem('pin_code', positions[0].postalCode);
     }
   };
 
@@ -263,13 +149,11 @@ const HomeScreen = ({route, navigation}: Props) => {
 
     console.log('Local storage pin code -> ' + pin_code);
 
-    return pinCode;
+    return pin_code;
   };
 
   useEffect(() => {
-    permissionHandle();
-    pincode();
-    console.log(DeviceInfo.getModel());
+    requestOutdoorCoordinates();
   }, []);
 
   return (
@@ -366,24 +250,11 @@ const HomeScreen = ({route, navigation}: Props) => {
                 },
               }}
               // update={update}
-              // onLoad={() => setLoading(false)}
-              // debug
-              // key={resetKey}
+
               enableFullPlotly
             />
           )}
         </View>
-
-        {/* <Button
-          title="request wifi permissions"
-          onPress={requestWifiPermission}
-        />
-        <Button
-          title="Testing"
-          onPress={() => {
-            navigation.navigate('Testing');
-          }}
-        /> */}
 
         <View style={styles.navbar}>
           <View style={styles.ic}>
