@@ -38,6 +38,7 @@ import {Marker} from 'react-native-maps';
 import Plotly from 'react-native-plotly';
 import Geocoder from 'react-native-geocoder';
 import messaging from '@react-native-firebase/messaging';
+import {API_URL} from '../utils/global';
 
 const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Outdoor');
@@ -58,7 +59,7 @@ const HomeScreen = ({route, navigation}: Props) => {
     const level = await WifiManager.getCurrentSignalStrength();
     setRssi(level);
     const res = await axios.post(
-      'http://192.168.0.101:4000/location/indoor',
+      `${API_URL}/location/indoor`,
       {
         rssi: level,
         trial,
@@ -88,8 +89,6 @@ const HomeScreen = ({route, navigation}: Props) => {
 
     if (permission.includes('authorized')) {
       const location = await RNLocation.getLatestLocation({timeout: 100});
-      setLatitude(location?.latitude ?? 0);
-      setLongitude(location?.longitude ?? 0);
 
       console.log(
         location,
@@ -101,7 +100,7 @@ const HomeScreen = ({route, navigation}: Props) => {
       setLongitude(location?.longitude ?? 0);
 
       const response = await axios.post(
-        'http://192.168.0.101:4000/location/outdoor',
+        `${API_URL}/location/outdoor`,
         {
           latitude: location?.latitude ?? 0,
           longitude: location?.longitude ?? 0,

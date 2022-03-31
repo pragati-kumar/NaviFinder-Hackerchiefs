@@ -37,7 +37,7 @@ const SplashScreen = ({navigation, route}: Props) => {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        // console.log('Thank you for your permission! :)');
+        console.log('Thank you for your permission! :)');
         WifiManager.getCurrentWifiSSID().then(
           ssid => {
             console.log('Your current connected wifi SSID is ' + ssid);

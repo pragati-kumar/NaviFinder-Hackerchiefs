@@ -63,7 +63,7 @@ const App = () => {
       <Text>Hello World</Text> */}
       <NavigationContainer>
         <RootStack.Navigator
-          initialRouteName="Home"
+          initialRouteName="Splash"
           screenOptions={{headerShown: false}}>
           <RootStack.Screen name="Disaster" component={DisasterScreen} />
           <RootStack.Screen name="Testing" component={TestingScreen} />
