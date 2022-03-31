@@ -9,8 +9,8 @@ import {RootStackParamList} from './types';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Alert, StatusBar, Text} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-//import {Notifications} from 'react-native-notifications';
 import notifee from '@notifee/react-native';
+import Toast from 'react-native-toast-message';
 import {log} from './utils/appLogger';
 
 async function requestUserPermission() {
@@ -72,6 +72,7 @@ const App = () => {
           <RootStack.Screen name="Splash" component={SplashScreen} />
         </RootStack.Navigator>
       </NavigationContainer>
+      <Toast />
     </SafeAreaProvider>
   );
 };

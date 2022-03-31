@@ -81,9 +81,9 @@ const HomeScreen = ({route, navigation}: Props) => {
     setSelected('Indoor');
     // await requestWifiPermission();
     await reqIndoorCoordinates(true);
-    setInterval(() => {
-      reqIndoorCoordinates(false);
-    }, 900);
+    // setInterval(() => {
+    //   reqIndoorCoordinates(false);
+    // }, 900);
   };
 
   const requestOutdoorCoordinates = async () => {
@@ -159,6 +159,10 @@ const HomeScreen = ({route, navigation}: Props) => {
     requestOutdoorCoordinates();
   }, []);
 
+  const update = (_, {data, layout, config}, plotly) => {
+    plotly.react(data, layout, config);
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.map}>
@@ -222,7 +226,12 @@ const HomeScreen = ({route, navigation}: Props) => {
             <Plotly
               // data={[trace]}
               // layout={{ title: 'Plotly.js running in React Native!' }}
-              style={{borderWidth: 1, borderColor: 'green'}}
+              style={{
+                borderWidth: 1,
+                borderColor: 'green',
+                width: '100%',
+                height: '95%',
+              }}
               data={[
                 {
                   x: [indoorLocation.x / 10, 5, 6],
@@ -237,8 +246,8 @@ const HomeScreen = ({route, navigation}: Props) => {
                 },
               ]}
               layout={{
-                // width: '100%',
-                // height: 900,
+                width: '100%',
+                height: '100%',
                 title: 'Fancy Plot',
                 scene3: {
                   domain: {
@@ -252,8 +261,7 @@ const HomeScreen = ({route, navigation}: Props) => {
                   },
                 },
               }}
-              // update={update}
-
+              update={update}
               enableFullPlotly
             />
           )}
