@@ -59,6 +59,17 @@ const Disaster = () => {
           <Text style={styles.icText}> Explore </Text>
         </View>
 
+        <TouchableWithoutFeedback>
+          <View style={styles.ic}>
+            <Icon color="#8E91A5" name="warning" />
+            <Text style={styles.icText}> Panic </Text>
+          </View>
+        </TouchableWithoutFeedback>
+
+        <View style={styles.navigate}>
+          <Icon color="white" name="location-arrow" type="font-awesome" />
+        </View>
+
         <View style={styles.ic}>
           <Icon color="#8E91A5" name="person" />
           <Text style={styles.icText}> Profile </Text>
