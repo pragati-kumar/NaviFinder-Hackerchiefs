@@ -73,7 +73,7 @@ const HomeScreen = ({route, navigation}: Props) => {
       },
     );
 
-    log('-------');
+    setIndoorLocation(res.data);
     log(res.data);
   };
 
