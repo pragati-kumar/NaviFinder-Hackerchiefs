@@ -45,6 +45,7 @@ const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Outdoor');
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [indoorLocation, setIndoorLocation] = useState({x: 0, y: 0, floor: 0});
   const [rssi, setRssi] = useState(0);
   const token =
     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI2MjQxZWQzZDQ3ZDlhN2NkMTI4MDNiNWEiLCJwaG9uZSI6Ijk2NTA4NjY5OTMifQ.rECSBX_ORiy0p0Mn0fX5NYLHUZ2mJMpXqj1cN0S4n5U';
@@ -224,9 +225,9 @@ const HomeScreen = ({route, navigation}: Props) => {
               style={{borderWidth: 1, borderColor: 'green'}}
               data={[
                 {
-                  x: [4, 5, 6],
-                  y: [8, 9, 10],
-                  z: [4, 5, 8],
+                  x: [indoorLocation.x / 10, 5, 6],
+                  y: [indoorLocation.y / 10, 9, 10],
+                  z: [indoorLocation.floor, 5, 8],
                   text: ['You', 'Target 1', 'Target 2'],
                   textposition: 'bottom',
                   type: 'scatter3d',
@@ -246,7 +247,7 @@ const HomeScreen = ({route, navigation}: Props) => {
                   },
                   camera: {
                     center: {x: 0, y: 0, z: 0},
-                    eye: {x: 2.5, y: 0.1, z: 0.1},
+                    eye: {x: 1.5, y: 1.2, z: 1.5},
                     up: {x: 0, y: 0, z: 1},
                   },
                 },
