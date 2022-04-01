@@ -11,20 +11,11 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 import {
-  Button,
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
-  PermissionsAndroid,
-  TouchableNativeFeedback,
   TouchableHighlight,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNLocation from 'react-native-location';
@@ -40,6 +31,7 @@ import Geocoder from 'react-native-geocoder';
 import messaging from '@react-native-firebase/messaging';
 import {API_URL} from '../utils/global';
 import {log} from '../utils/appLogger';
+import Navbar from './Navbar';
 
 const HomeScreen = ({route, navigation}: Props) => {
   const [selected, setSelected] = useState('Outdoor');
@@ -73,7 +65,7 @@ const HomeScreen = ({route, navigation}: Props) => {
       },
     );
 
-    log('-------');
+    setIndoorLocation(res.data);
     log(res.data);
   };
 
@@ -81,9 +73,9 @@ const HomeScreen = ({route, navigation}: Props) => {
     setSelected('Indoor');
     // await requestWifiPermission();
     await reqIndoorCoordinates(true);
-    setInterval(() => {
-      reqIndoorCoordinates(false);
-    }, 900);
+    // setInterval(() => {
+    //   reqIndoorCoordinates(false);
+    // }, 900);
   };
 
   const requestOutdoorCoordinates = async () => {
@@ -159,6 +151,10 @@ const HomeScreen = ({route, navigation}: Props) => {
     requestOutdoorCoordinates();
   }, []);
 
+  const update = (_, {data, layout, config}, plotly) => {
+    plotly.react(data, layout, config);
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.map}>
@@ -222,7 +218,12 @@ const HomeScreen = ({route, navigation}: Props) => {
             <Plotly
               // data={[trace]}
               // layout={{ title: 'Plotly.js running in React Native!' }}
-              style={{borderWidth: 1, borderColor: 'green'}}
+              style={{
+                borderWidth: 1,
+                borderColor: 'green',
+                width: '100%',
+                height: '95%',
+              }}
               data={[
                 {
                   x: [indoorLocation.x / 10, 5, 6],
@@ -237,8 +238,8 @@ const HomeScreen = ({route, navigation}: Props) => {
                 },
               ]}
               layout={{
-                // width: '100%',
-                // height: 900,
+                width: '100%',
+                height: '100%',
                 title: 'Fancy Plot',
                 scene3: {
                   domain: {
@@ -252,41 +253,14 @@ const HomeScreen = ({route, navigation}: Props) => {
                   },
                 },
               }}
-              // update={update}
-
+              update={update}
               enableFullPlotly
             />
           )}
         </View>
 
-        <View style={styles.navbar}>
-          <View style={styles.ic}>
-            <Icon color="#8E91A5" name="map" type="font-awesome" />
-            <Text style={styles.icText}> Explore </Text>
-          </View>
-
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('Disaster')}>
-            <View style={styles.ic}>
-              <Icon color="#8E91A5" name="warning" />
-              <Text style={styles.icText}> Panic </Text>
-            </View>
-          </TouchableWithoutFeedback>
-
-          <View style={styles.navigate}>
-            <Icon color="white" name="location-arrow" type="font-awesome" />
-          </View>
-
-          <View style={styles.ic}>
-            <Icon color="#8E91A5" name="person" />
-            <Text style={styles.icText}> Profile </Text>
-          </View>
-
-          <View style={styles.ic}>
-            <Icon color="#8E91A5" name="bars" type="font-awesome" />
-            <Text style={styles.icText}> More </Text>
-          </View>
-        </View>
+        <Navbar route={route} navigation={navigation} />
+        
       </View>
     </SafeAreaView>
   );

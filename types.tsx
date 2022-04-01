@@ -3,4 +3,7 @@ export type RootStackParamList = {
   Testing: undefined;
   Disaster: undefined;
   Splash: undefined;
+  Register: undefined;
+  Login: undefined;
+  LocShare: undefined;
 };

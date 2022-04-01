@@ -20,10 +20,12 @@ import {
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Header} from 'react-native/Libraries/NewAppScreen';
 import {RootStackParamList} from '../types';
-
+import Toast from 'react-native-toast-message';
 import {Icon} from 'react-native-elements';
+import Navbar from './Navbar';
+import {log} from '../utils/appLogger';
 
-const Disaster = () => {
+const Disaster = ({route, navigation}: Props) => {
   const createAlert = () =>
     Alert.alert(
       '',
@@ -31,10 +33,24 @@ const Disaster = () => {
       [
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
+          onPress: () => {
+            log('Cancel Pressed');
+          },
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        {
+          text: 'OK',
+          onPress: () => {
+            log('OK Pressed');
+            Toast.show({
+              position: 'top',
+              topOffset: 80,
+              type: 'success',
+              text1: 'Broadcasted',
+              text2: 'Authorities have been notified, help will be here soon',
+            });
+          },
+        },
       ],
     );
 
@@ -53,33 +69,7 @@ const Disaster = () => {
         />
       </View>
 
-      <View style={styles.navbar}>
-        <View style={styles.ic}>
-          <Icon color="#8E91A5" name="map" type="font-awesome" />
-          <Text style={styles.icText}> Explore </Text>
-        </View>
-
-        <TouchableWithoutFeedback>
-          <View style={styles.ic}>
-            <Icon color="#8E91A5" name="warning" />
-            <Text style={styles.icText}> Panic </Text>
-          </View>
-        </TouchableWithoutFeedback>
-
-        <View style={styles.navigate}>
-          <Icon color="white" name="location-arrow" type="font-awesome" />
-        </View>
-
-        <View style={styles.ic}>
-          <Icon color="#8E91A5" name="person" />
-          <Text style={styles.icText}> Profile </Text>
-        </View>
-
-        <View style={styles.ic}>
-          <Icon color="#8E91A5" name="bars" type="font-awesome" />
-          <Text style={styles.icText}> More </Text>
-        </View>
-      </View>
+      <Navbar route={route} navigation={navigation} />
     </SafeAreaProvider>
   );
 };
@@ -138,5 +128,7 @@ const styles = StyleSheet.create({
     },
   },
 });
+
+type Props = NativeStackScreenProps<RootStackParamList, 'Disaster'>;
 
 export default Disaster;
